@@ -235,7 +235,7 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             x *= * apvts.getRawParameterValue("OUTPUT");
         
             // Write to buffer
-            float y = x; // Set output sample
+            float y = x; // Set output samples
             buffer.getWritePointer(channel)[i] = y;
         }
     }
