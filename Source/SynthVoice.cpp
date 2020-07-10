@@ -16,3 +16,21 @@
 //{
 //
 //}
+
+
+Dummy::Dummy(SynthParameters* params) : parameters(params)
+{
+    
+}
+
+SynthVoice::SynthVoice(SynthParameters* params) : parameters(params)
+{
+    
+}
+
+void SynthVoice::setCurrentPlaybackSampleRate (const double newRate)
+{
+    settings.setSampleRate(newRate);
+
+    SynthesiserVoice::setCurrentPlaybackSampleRate (newRate);
+}

@@ -25,13 +25,13 @@ SynthTakeIiAudioProcessor::SynthTakeIiAudioProcessor()
 apvts(*this, nullptr, "Parameters", createParameters())
 #endif
 {
-    
+    apvts.state.addListener (this);
     
     hw_Synth.clearVoices();
     
     for (int i = 0; i < 5; ++i)
     {
-        hw_Synth.addVoice(new SynthVoice());
+        hw_Synth.addVoice(new SynthVoice(&params));
     }
     
     hw_Synth.clearSounds();
@@ -181,12 +181,16 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
 {
     // Clear any leftovers in the buffer
     buffer.clear();
+    
+    if (mustUpdateProcessing)
+        update();
+    
     // generate the next synth block
     hw_Synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
-    debugParams();
+//    debugParams();
     
-    
+
 //    int filter_type_parameter = *apvts.getRawParameterValue("FILTER_TYPE");
 //    DBG("Variable test: " << filter_type_parameter);
 //
@@ -265,7 +269,24 @@ void SynthTakeIiAudioProcessor::setStateInformation (const void* data, int sizeI
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
 }
+//==============================================================================
+void SynthTakeIiAudioProcessor::update()
+{
+    mustUpdateProcessing = false;
+    
+    //// param updates—>para parameter.foo = voice related parameter
+    
+    auto newAttack = apvts.getRawParameterValue("ATTACK");
+//    auto newDecay = apvts.getRawParameterValue("DECAY");
+//    auto newRelease = apvts.getRawParameterValue("SUSTAIN");
+//    auto newSustain = apvts.getRawParameterValue("RELEASE");
+    
+    params.attack = newAttack->load();
+    params.decay = apvts.getRawParameterValue("DECAY")->load();
+    params.release = apvts.getRawParameterValue("SUSTAIN")->load();
+    params.sustain = apvts.getRawParameterValue("RELEASE")->load();
 
+}
 
 //==============================================================================
 // This creates new instances of the plugin..

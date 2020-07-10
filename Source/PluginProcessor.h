@@ -16,12 +16,13 @@
 #include "Distortion.h"
 #include "UtilityFunctions.h"
 #include "Delay.h"
+#include "SynthParams.h"
 
 //==============================================================================
 /**
 */
-class SynthTakeIiAudioProcessor  : public AudioProcessor,
-public ValueTree::Listener 
+class SynthTakeIiAudioProcessor  :  public AudioProcessor,
+                                    public ValueTree::Listener
 {
 public:
     //==============================================================================
@@ -60,11 +61,15 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-
+    
+    void update();
+    
     float output_gain_multiplier { 0.5 };
     
     Synthesiser hw_Synth;
-    SynthVoice* hw_Voice;
+  
+    
+//    SynthVoice* hw_Voice;
     
 //    { new SynthVoice() }
     
@@ -85,9 +90,20 @@ public:
     AudioProcessorValueTreeState::ParameterLayout createParameters();
     
     void debugParams();
+    
+    SynthParameters params;
 
     
 private:
+    
+    bool mustUpdateProcessing  {false};
+    
+    void valueTreePropertyChanged (ValueTree& tree, const Identifier& property) override
+    {
+        mustUpdateProcessing = true;
+    }
+    
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthTakeIiAudioProcessor)
     

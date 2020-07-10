@@ -34,6 +34,7 @@
 #include "maximilian.h"
 #include "math.h"
 #include <iterator>
+#include "JuceHeader.h"
 
 /*  Maximilian can be configured to load ogg vorbis format files using the
  *   loadOgg() method.
@@ -1355,10 +1356,11 @@ double maxiEnv::adsr(double input, int trigger) {
 
 
 void maxiEnv::setAttack(double attackMS) {
-	attack = 1-pow( 0.01, 1.0 / ( attackMS * maxiSettings::sampleRate * 0.001 ) );
+    attack = 1-pow( 0.01, 1.0 / ( attackMS * maxiSettings::sampleRate * 0.001 ) );
 }
 
 void maxiEnv::setRelease(double releaseMS) {
+    DBG ("releaseMS" << releaseMS);
 	release = pow( 0.01, 1.0 / ( releaseMS * maxiSettings::sampleRate * 0.001 ) );
 }
 

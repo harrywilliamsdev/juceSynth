@@ -15,7 +15,7 @@
 #include "Maximilian.h"
 #include "Osc.h"
 #include "UtilityFunctions.h"
-
+#include "SynthParams.h"
 
 /*
  
@@ -28,11 +28,31 @@
  
  
  
+ 
+ 
+ 
+ 
+ 
  */
+
+
+class Dummy
+{
+public:
+    Dummy(SynthParameters* params);
+   
+private:
+    SynthParameters* parameters;
+    
+};
 
 
 class SynthVoice : public SynthesiserVoice
 {
+public:
+    SynthVoice (SynthParameters* params);
+    
+    void setCurrentPlaybackSampleRate (const double newRate) override;
 
 
 //==========================================================
@@ -46,6 +66,7 @@ class SynthVoice : public SynthesiserVoice
     
     void startNote(int midiNoteNumber, float velocity, SynthesiserSound *sound, int currentPitchWheelPosition)
     {
+    
         env1.trigger = 1;
         level = velocity;
         frequency = midiNoteToFrequency(midiNoteNumber); // add steps
@@ -60,7 +81,6 @@ class SynthVoice : public SynthesiserVoice
     {
         env1.trigger = 0;
         allowtailOff = true;
-        
         
         if (velocity == 0)
         {
@@ -80,18 +100,17 @@ class SynthVoice : public SynthesiserVoice
         
     }
     
-    void renderNextBlock (AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
+    // who knows how but this block will be??!
+    void renderNextBlock (AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override
     {
-       
+        env1.setAttack(parameters->attack);
+        env1.setDecay(parameters->decay);
+        env1.setSustain(parameters->sustain);
+        env1.setRelease(parameters->release);
         
         for (int sample = 0; sample < numSamples; ++sample)
         {
-            env1.setAttack(attack);
-            env1.setDecay(decay);
-            env1.setSustain(sustain);
-            env1.setRelease(release);
-            
-            
+
           // GENERATE SIGNALS
             double osc = hw_osc_1.do_Oscillate(frequency, 4); // add cents to pitch
             double osc2 = hw_osc_2.do_Oscillate((frequency /2 ), 2);
@@ -99,7 +118,7 @@ class SynthVoice : public SynthesiserVoice
             
         // APPLY VOLUME ENVELOPE TO THE SIGNALS
             // TEMPORARY MIX THEM TOGETHER
-            double oscEnv = env1.adsr((osc + osc2) * 0.33, env1.trigger) * level;
+            double oscEnv = env1.adsr((osc + osc2) * 0.5, env1.trigger) * level;
         // RUN IT THROUGH A FILTER
             double oscFilt = filter1.lores(oscEnv, 6000, 1.1);
             
@@ -116,28 +135,25 @@ class SynthVoice : public SynthesiserVoice
     
 public:
     
-    double attack {130};
-    double decay {100};
-    double sustain {0.5};
-    double release {400};
+//    double attack {130};
+//    double decay {100};
+//    double sustain {0.5};
+//    double release {400};
     
     
 
 private:
   //  SynthTakeIiAudioProcessor& processor;
     
+    SynthParameters* parameters;
     double level;
     double frequency;
     
+    maxiSettings settings;
     maxiEnv env1;
     maxiFilter filter1;
     
     Oscillator hw_osc_1;
     Oscillator hw_osc_2;
     Oscillator hw_osc_noise;
-    
-  
-    
- //   SynthTakeIiAudioProcessor& processor;
-    
 };

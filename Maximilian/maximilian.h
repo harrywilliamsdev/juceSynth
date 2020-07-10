@@ -514,6 +514,8 @@ public:
 	double sustain;
 	double release;
 	double amplitude;
+    
+    double sampleRate;
 
     void setAttack(double attackMS);
     void setRelease(double releaseMS);
@@ -535,6 +537,11 @@ public:
 	void setTrigger(int trigger){
 		this->trigger = trigger;
 	}
+    
+    void setSampleRate(double newFs)
+    {
+        sampleRate = newFs;
+    }
 
 	// ------------------------------------------------
 };
