@@ -26,12 +26,13 @@ apvts(*this, nullptr, "Parameters", createParameters())
 #endif
 {
     
+    apvts.state.addListener(this);
     
     hw_Synth.clearVoices();
     
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < 4; ++i)
     {
-        hw_Synth.addVoice(new SynthVoice());
+        hw_Synth.addVoice(new SynthVoice(&params));
     }
     
     hw_Synth.clearSounds();
@@ -179,17 +180,24 @@ void SynthTakeIiAudioProcessor::debugParams() {
 
 void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
+    
     // Clear any leftovers in the buffer
     buffer.clear();
+    
+    
+    // update parameters in the synth voice
+   // if (mustUpdateProcessing)
+        update();
+    
+    
+    
     // generate the next synth block
     hw_Synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
-    debugParams();
+ //   debugParams();
     
     
-//    int filter_type_parameter = *apvts.getRawParameterValue("FILTER_TYPE");
-//    DBG("Variable test: " << filter_type_parameter);
-//
+
     
     float distortion_wetdry_balance = *apvts.getRawParameterValue("DISTORTION_WETDRY");
     float delay_wetdry_balance = *apvts.getRawParameterValue("DELAY_WETDRY");
@@ -221,10 +229,12 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             delay.setSpeed(*apvts.getRawParameterValue("DELAY_MODULATION"));
             delay.setDelaySamples(*apvts.getRawParameterValue("DELAY_TIME") * 44.1);
             
+        
+            float input_to_delay = x + (-*apvts.getRawParameterValue("DELAY_FEEDBACK")
+                                        * delayFeedbackSample[channel]);
             
-            // INCREASE FEEDBACK ON FASTER DELAY TIMES TO EVEN OUT STEREO DECAY
-            float input_to_delay = x + (-*apvts.getRawParameterValue("DELAY_FEEDBACK") * delayFeedbackSample[channel]);
-            float output_of_delay = delay.processSample(input_to_delay, channel, *apvts.getRawParameterValue("DELAY_GROOVE")); 
+            float output_of_delay = delay.processSample(input_to_delay, channel, *apvts.getRawParameterValue("DELAY_GROOVE"));
+            
             delayFeedbackSample[channel] = delay_repeats_distortion.processSample(output_of_delay, 0.9, 3);
                 // DELAY WET DRY BLEND
             
@@ -266,6 +276,51 @@ void SynthTakeIiAudioProcessor::setStateInformation (const void* data, int sizeI
     // whose contents will have been created by the getStateInformation() call.
 }
 
+/*
+ 
+ This is a key method for connecting the GUI to the voice processing
+ in SynthVoice.h
+ 
+ We pass it into a SynthVoiceParams struct which is serves as a bridge between the file
+ 
+ 
+ */
+void SynthTakeIiAudioProcessor::update()
+{
+    mustUpdateProcessing = false;
+    
+    
+    // ADSR
+    params.attack = apvts.getRawParameterValue("ATTACK")->load(); // IMPLEMENTED
+    params.decay = apvts.getRawParameterValue("DECAY")->load();  // IMPLENENTED
+    params.sustain = apvts.getRawParameterValue("SUSTAIN")->load(); // IMPLEMENTED
+    params.release = apvts.getRawParameterValue("RELEASE")->load(); // IMPLEMENTED
+    // OSC 1
+    params.osc_1_wave = apvts.getRawParameterValue("OSC1_WAVE")->load(); // IMPLEMENTED
+    params.osc_1_pitch = apvts.getRawParameterValue("OSC1_PITCH")->load(); // MORE RESEARCH REQUIRED
+    params.osc_1_detune = apvts.getRawParameterValue("OSC1_DETUNE")->load(); // MORE RESEARCH REQUIRED
+    // OSC 2
+    params.osc_2_wave = apvts.getRawParameterValue("OSC2_WAVE")->load(); // IMPLEMENTED
+    params.osc_2_pitch = apvts.getRawParameterValue("OSC2_PITCH")->load(); // MORE RESEARCH REQUIRED
+    params.osc_2_detune = apvts.getRawParameterValue("OSC2_DETUNE")->load(); // MORE RESEARCH REQUIRED
+    
+    // FILTER SECTION
+    
+    params.filter_type = apvts.getRawParameterValue("FILTER_TYPE")->load();
+    params.filter_cutoff = apvts.getRawParameterValue("FILTER_CUTOFF")->load();
+    params.filter_resonance = apvts.getRawParameterValue("FILTER_RESONANCE")->load();
+    
+    // MIXER SECTION
+    
+    params.osc1_volume = apvts.getRawParameterValue("OSC1_VOLUME")->load();
+    params.osc2_volume = apvts.getRawParameterValue("OSC2_VOLUME")->load();
+    params.osc_noise_volume = apvts.getRawParameterValue("OSCNOISE_VOLUME")->load();
+    
+}
+
+
+
+
 
 //==============================================================================
 // This creates new instances of the plugin..
@@ -282,19 +337,19 @@ SynthTakeIiAudioProcessor::createParameters()
     std::vector<std::unique_ptr<RangedAudioParameter>> parameters;
     
     // OSC 1 PARAMS
-    parameters.push_back(std::make_unique<AudioParameterInt>("OSC1_WAVE", "Osc1_Wave", 1, 5, 2));
+    parameters.push_back(std::make_unique<AudioParameterInt>("OSC1_WAVE", "Osc1_Wave", 1, 4, 2));
     parameters.push_back(std::make_unique<AudioParameterInt>("OSC1_PITCH", "Osc1_Pitch", -12, 12, 0));
     parameters.push_back(std::make_unique<AudioParameterFloat>("OSC1_DETUNE", "Osc1_Detune", -50, 50, 0));
     
     // OSC 2 PARAMS
-    parameters.push_back(std::make_unique<AudioParameterInt>("OSC2_WAVE", "Osc2_Wave", 1, 5, 2));
+    parameters.push_back(std::make_unique<AudioParameterInt>("OSC2_WAVE", "Osc2_Wave", 1, 4, 2));
     parameters.push_back(std::make_unique<AudioParameterInt>("OSC2_PITCH", "Osc2_Pitch", -12, 12, 0));
     parameters.push_back(std::make_unique<AudioParameterFloat>("OSC2_DETUNE", "Osc2_Detune", -50, 50, 0));
     
     // FILTER PAR
     parameters.push_back(std::make_unique<AudioParameterInt>("FILTER_TYPE", "Filter_Type", 1, 2, 2));
     parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_CUTOFF", "Filter_Cutoff", 20, 8000, 0.01));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_RESONANCE", "Filter_Resonance", 0.0, 1.0, 0.01));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_RESONANCE", "Filter_Resonance", 1.0, 5.0, 0.01));
     
     // ADSR
     parameters.push_back(std:: make_unique<AudioParameterFloat>("ATTACK", "Attack", 0.0f, 5000.f, 1000.f));
@@ -319,7 +374,7 @@ SynthTakeIiAudioProcessor::createParameters()
     parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_TIME", "Delay Time", 0, 1750, 250));
     parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_FEEDBACK", "Delay Feedback", 0.0f, 2.f, 0.5f));
     parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_MODULATION", "Modulation", 0.01, 15.f, 2.0f));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_GROOVE", "Delay Groove", 0.01, 2, 1.01));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_GROOVE", "Delay Groove", 1.f, 2, 1.01));
     parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_WETDRY", "Delay Blend", 0.0f, 1.0f, 0.5f));
     
     // OUTPUT SECTION
@@ -329,9 +384,9 @@ SynthTakeIiAudioProcessor::createParameters()
     
     parameters.push_back(std::make_unique<AudioParameterFloat>("OSC1_VOLUME", "Osc_I", 0.0, 1.0f, 1.f));
     parameters.push_back(std::make_unique<AudioParameterFloat>("OSC2_VOLUME", "Osc_II", 0.0, 1.0f, 1.f));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("OSCNOISE_VOLUME", "Osc_Noise", 0.0, 1.0f, 1.f));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("OSCNOISE_VOLUME", "Osc_Noise", 0.0, 1.0f, 0.05f));
     
-    parameters.push_back(std::make_unique<AudioParameterFloat>("OUTPUT", "Output", 0.0f, 1.0f, 1.0f));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("OUTPUT", "Output", 0.0f, 1.0f, 0.5f));
     parameters.push_back(std::make_unique<AudioParameterFloat>("PAN", "Pan", -50.f, 50.f, 0.f));
     
     return { parameters.begin(), parameters.end() };

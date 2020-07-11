@@ -15,7 +15,7 @@
 #include "Maximilian.h"
 #include "Osc.h"
 #include "UtilityFunctions.h"
-
+#include "SynthVoiceParams.h"
 
 /*
  
@@ -33,6 +33,11 @@
 
 class SynthVoice : public SynthesiserVoice
 {
+    
+public:
+    SynthVoice (SynthVoiceParameters* params);
+    
+    void setCurrentPlaybackSampleRate (const double newRate) override; 
 
 
 //==========================================================
@@ -48,6 +53,10 @@ class SynthVoice : public SynthesiserVoice
     {
         env1.trigger = 1;
         level = velocity;
+        
+        // ADD COARSE DETUNE
+        
+        
         frequency = midiNoteToFrequency(midiNoteNumber); // add steps
         
         
@@ -80,28 +89,37 @@ class SynthVoice : public SynthesiserVoice
         
     }
     
-    void renderNextBlock (AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
+    void renderNextBlock (AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override
     {
        
+        env1.setAttack(parameters->attack);
+        env1.setDecay(parameters->decay);
+        env1.setSustain(parameters->sustain);
+        env1.setRelease(parameters->release);
+        
         
         for (int sample = 0; sample < numSamples; ++sample)
         {
-            env1.setAttack(attack);
-            env1.setDecay(decay);
-            env1.setSustain(sustain);
-            env1.setRelease(release);
-            
             
           // GENERATE SIGNALS
-            double osc = hw_osc_1.do_Oscillate(frequency, 4); // add cents to pitch
-            double osc2 = hw_osc_2.do_Oscillate((frequency /2 ), 2);
-         //   double oscNoise = hw_osc_noise.do_Oscillate(frequency, 5) * 0.025;
+            double osc = hw_osc_1.do_Oscillate(frequency, parameters->osc_1_wave); // add cents to pitch
+            double osc2 = hw_osc_2.do_Oscillate((frequency), parameters->osc_2_wave);
+            double oscNoise = hw_osc_noise.do_Oscillate(frequency, 5);
+            
+            
+            // MIXER SECTION
+                // ADJUST LEVELS
+            osc *= parameters->osc1_volume;
+            osc2 *= parameters->osc2_volume;
+            oscNoise *= parameters->osc_noise_volume;
+                // AND SUM TOGETHER
+            double oscMixed = (osc + osc2 + oscNoise) * 0.33;
+            
             
         // APPLY VOLUME ENVELOPE TO THE SIGNALS
-            // TEMPORARY MIX THEM TOGETHER
-            double oscEnv = env1.adsr((osc + osc2) * 0.33, env1.trigger) * level;
+            double oscEnv = env1.adsr(oscMixed, env1.trigger) * level;
         // RUN IT THROUGH A FILTER
-            double oscFilt = filter1.lores(oscEnv, 6000, 1.1);
+            double oscFilt = filter1.lores(oscEnv, parameters->filter_cutoff, parameters->filter_resonance);
             
             double outputSample = oscFilt;
             
@@ -136,6 +154,9 @@ private:
     Oscillator hw_osc_2;
     Oscillator hw_osc_noise;
     
+    maxiSettings settings;
+    
+    SynthVoiceParameters* parameters;
   
     
  //   SynthTakeIiAudioProcessor& processor;

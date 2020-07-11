@@ -11,8 +11,13 @@
 #include "SynthVoice.h"
 
 
-//SynthVoice::SynthVoice(SynthTakeIiAudioProcessor& p):
-//processor(p)
-//{
-//
-//}
+SynthVoice::SynthVoice(SynthVoiceParameters* params) : parameters (params)
+{
+    
+}
+
+void SynthVoice::setCurrentPlaybackSampleRate(const double newRate)
+{
+    settings.setSampleRate(newRate);
+    SynthesiserVoice::setCurrentPlaybackSampleRate(newRate);
+}
