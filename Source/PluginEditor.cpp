@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
@@ -68,7 +59,7 @@ SynthTakeIiAudioProcessorEditor::SynthTakeIiAudioProcessorEditor (SynthTakeIiAud
 osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     osc_1_SliderDetune.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
     osc_1_SliderDetune.setColour(Slider::thumbColourId, hw_colour_6);
-    osc_1_SliderDetune.setRange(-50, 50, 0.5);
+    osc_1_SliderDetune.setRange(-0.96, 1.03, 0.001);
     osc_1_SliderDetune.setValue(0);
     osc_1_SliderDetune.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     addAndMakeVisible(osc_1_SliderDetune);

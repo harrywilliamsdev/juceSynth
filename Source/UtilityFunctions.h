@@ -14,6 +14,7 @@
 #define TWOPI 6.283185307179586476925286766559
 
 
+
 inline double midiNoteToFrequency(int midiNote)
 {
     const double ratio = std::pow(2.0, 1.0 / 12.0);
@@ -28,12 +29,38 @@ inline double midiNoteToFrequency(int midiNote)
     return frequency;
 }
 
+inline double frequency_semitone_increase(float in_frequency, int semitones)
+{
+    const double ratio = std::pow(2.0, 1.0 / 12);
+    
+    double out_frequency = in_frequency  * std::pow(ratio, semitones);
+    
+    return out_frequency; 
+}
+
 
 
 inline int convert_ms_to_samples(int milliseconds)
 {
     return milliseconds * 44100;
 }
+
+// Used to convert Modulo ramp into expo decay waveform.
+inline float concave_inverted_transform(float input)
+{
+    float LIMIT = 0.00398107;
+    if (input <= LIMIT)
+        return 1.0;
+    
+    return -(5.0/12.0)*std::log10(input);
+}
+
+
+
+
+
+
+
 
 
 inline float linear_interp(float v0, float v1, float t)

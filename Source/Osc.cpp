@@ -9,10 +9,7 @@
 */
 
 #include "Osc.h"
-#include <cmath>
 #include <JuceHeader.h>
-#include "UtilityFunctions.h"
-
 
 Oscillator::Oscillator()
 {
@@ -23,12 +20,12 @@ Oscillator::Oscillator()
 double Oscillator::generate_sinewave(double frequency)
 {
     increment = (1 / (m_sample_rate / frequency));
-    output = sin(phase*(TWOPI));
     // Wrap around the modulo counter
     if (phase >= 1.0)
     {
         phase -= 1.0;
     }
+    output = sin(phase*(TWOPI));
     phase += increment;
     return (output);
 }
@@ -60,11 +57,11 @@ double Oscillator::generate_saw(double frequency)
     // Calculate phase inc
     increment = (1 / (m_sample_rate / frequency));
     
-    output = phase;
     if (phase >= 1.0)
     {
         phase -= 2.0;
     }
+    output = phase;
     phase +=increment;
     
     return output; 
@@ -73,6 +70,11 @@ double Oscillator::generate_saw(double frequency)
 double Oscillator::generate_square(double frequency)
 {
     increment = (1 / (m_sample_rate / frequency));
+    // check modulo wrap
+    if (phase >= 1.0)
+    {
+        phase -= 1.0;
+    }
     // calculate output
     if (phase < 0.5)
     {
@@ -80,12 +82,7 @@ double Oscillator::generate_square(double frequency)
     }
     else
     {
-        output = 1.0; 
-    }
-    // check modulo wrap
-    if (phase >= 1.0)
-    {
-        phase -= 1.0;
+        output = 1.0;
     }
     // recalculate inc amount, and increment
     phase += increment;
@@ -98,6 +95,44 @@ double Oscillator::generate_noise()
     float randValue = rand()/(float)RAND_MAX;
     output = randValue*2 -1;
     return(output);
+}
+
+double Oscillator::generate_pn_noise(unsigned int uPNRegister)
+{
+    // get the bits from the seed value
+    unsigned int b0 = EXTRACT_BITS(uPNRegister, 1, 1);
+    unsigned int b1 = EXTRACT_BITS(uPNRegister, 2, 1);
+    unsigned int b27 = EXTRACT_BITS(uPNRegister, 28, 1);
+    unsigned int b28 = EXTRACT_BITS(uPNRegister, 29, 1);
+    
+    // create an XOR
+    
+    unsigned int b31 = b0^b1^b27^b28;
+    
+    // form the mask to OR with the register to load b31
+    
+    if (b31 == 1 )
+    {
+        b31 = 0x10000000;
+        
+    }
+    
+    // shift one bit to the right
+    uPNRegister >>= 1;
+    
+    // set the bit
+    
+    uPNRegister |= b31;
+    
+    // convert to float
+    float fOut = (float)(uPNRegister)/((std::pow((float)2.0, (float)32.0)) / 16.0 );
+    
+    // scale
+    
+    fOut -= 1.0;
+    
+    return fOut;
+    
 }
 
 double Oscillator::do_Oscillate(double frequency, int oscType)
@@ -118,6 +153,11 @@ double Oscillator::do_Oscillate(double frequency, int oscType)
             break;
         case 5:
             output = generate_noise();
+            break;
+        case 6:
+            output = generate_pn_noise(frequency);
+            break;
+        
     }
     
     return output;

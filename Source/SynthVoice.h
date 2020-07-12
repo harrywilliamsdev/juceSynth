@@ -54,10 +54,13 @@ public:
         env1.trigger = 1;
         level = velocity;
         
-        // ADD COARSE DETUNE
+       
         
-        
+       // Calculate frequency based on midi note number received
         frequency = midiNoteToFrequency(midiNoteNumber); // add steps
+        // coarse offset the frequency using pitch
+        osc_1_frequency = frequency_semitone_increase(frequency, parameters->osc_1_pitch);
+        osc_2_frequency = frequency_semitone_increase(frequency, parameters->osc_2_pitch);
         
         
         
@@ -102,18 +105,22 @@ public:
         {
             
           // GENERATE SIGNALS
-            double osc = hw_osc_1.do_Oscillate(frequency, parameters->osc_1_wave); // add cents to pitch
-            double osc2 = hw_osc_2.do_Oscillate((frequency), parameters->osc_2_wave);
-            double oscNoise = hw_osc_noise.do_Oscillate(frequency, 5);
+            double osc_signal = hw_osc_1.do_Oscillate(osc_1_frequency * parameters->osc_1_detune, parameters->osc_1_wave); // add cents to pitch
+            double osc2_signal = hw_osc_2.do_Oscillate(osc_2_frequency * parameters->osc_2_detune, parameters->osc_2_wave);
+            double oscNoise_signal = hw_osc_noise.do_Oscillate(frequency, 5);
+            
+            // Filter Noise
+            
+        //    oscNoise_signal = filter1.lores(oscNoise_signal, 2000, 1.1);
             
             
             // MIXER SECTION
                 // ADJUST LEVELS
-            osc *= parameters->osc1_volume;
-            osc2 *= parameters->osc2_volume;
-            oscNoise *= parameters->osc_noise_volume;
+            osc_signal *= parameters->osc1_volume;
+            osc2_signal *= parameters->osc2_volume;
+            oscNoise_signal *= parameters->osc_noise_volume;
                 // AND SUM TOGETHER
-            double oscMixed = (osc + osc2 + oscNoise) * 0.33;
+            double oscMixed = (osc_signal + osc2_signal + oscNoise_signal) * 0.33;
             
             
         // APPLY VOLUME ENVELOPE TO THE SIGNALS
@@ -146,6 +153,12 @@ private:
     
     double level;
     double frequency;
+    
+    double osc_1_frequency;
+    double osc_2_frequency;
+    
+    float osc_1_cents;
+    float osc_2_cents;
     
     maxiEnv env1;
     maxiFilter filter1;

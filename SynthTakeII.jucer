@@ -12,6 +12,8 @@
         <FILE id="Xq1ImJ" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
         <FILE id="ZStMZL" name="Osc.cpp" compile="1" resource="0" file="Source/Osc.cpp"/>
         <FILE id="cXYJ0H" name="Osc.h" compile="0" resource="0" file="Source/Osc.h"/>
+        <FILE id="XHSZMB" name="SynthParameterLimits.h" compile="0" resource="0"
+              file="Source/SynthParameterLimits.h"/>
         <FILE id="ZI6MpT" name="SynthVoiceParams.h" compile="0" resource="0"
               file="Source/SynthVoiceParams.h"/>
         <FILE id="EYOGbQ" name="UtilityFunctions.h" compile="0" resource="0"

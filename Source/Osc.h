@@ -9,6 +9,11 @@
 */
 
 #pragma once
+#include <cmath>
+#include "UtilityFunctions.h"
+#include <JuceHeader.h>
+
+#define EXTRACT_BITS(the_val, bits_start, bits_len) ((the_val >> (bits_start - 1)) & ((1 << bits_len) - 1))
 
 
 class Oscillator
@@ -28,6 +33,7 @@ public:
     double generate_saw(double frequency);
     double generate_square(double frequency);
     double generate_noise();
+    double generate_pn_noise(unsigned int uPNRegister);
     
     // HELPERS
     

@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
 
 #pragma once
 
@@ -17,6 +8,7 @@
 #include "UtilityFunctions.h"
 #include "Delay.h"
 #include "SynthVoiceParams.h"
+#include "SynthParameterLimits.h"
 
 //==============================================================================
 /**
@@ -64,15 +56,12 @@ public:
     
     void update();
 
-    float output_gain_multiplier { 0.5 };
+    
+    SynthParameterLimits limits;
     
     Synthesiser hw_Synth;
     SynthVoice* hw_Voice;
     
-//    { new SynthVoice() }
-    
-    
-//    Delay delay;
     Delay delay;
     Distortion delay_repeats_distortion;
     
@@ -90,6 +79,8 @@ public:
     
     
     SynthVoiceParameters params;
+    
+
     
     void debugParams();
 

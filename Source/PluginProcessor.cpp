@@ -1,12 +1,4 @@
-/*
-  ==============================================================================
 
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
@@ -297,24 +289,24 @@ void SynthTakeIiAudioProcessor::update()
     params.release = apvts.getRawParameterValue("RELEASE")->load(); // IMPLEMENTED
     // OSC 1
     params.osc_1_wave = apvts.getRawParameterValue("OSC1_WAVE")->load(); // IMPLEMENTED
-    params.osc_1_pitch = apvts.getRawParameterValue("OSC1_PITCH")->load(); // MORE RESEARCH REQUIRED
+    params.osc_1_pitch = apvts.getRawParameterValue("OSC1_PITCH")->load(); // IMPLEMENTED
     params.osc_1_detune = apvts.getRawParameterValue("OSC1_DETUNE")->load(); // MORE RESEARCH REQUIRED
     // OSC 2
     params.osc_2_wave = apvts.getRawParameterValue("OSC2_WAVE")->load(); // IMPLEMENTED
-    params.osc_2_pitch = apvts.getRawParameterValue("OSC2_PITCH")->load(); // MORE RESEARCH REQUIRED
+    params.osc_2_pitch = apvts.getRawParameterValue("OSC2_PITCH")->load(); // IMPLEMENTED
     params.osc_2_detune = apvts.getRawParameterValue("OSC2_DETUNE")->load(); // MORE RESEARCH REQUIRED
     
     // FILTER SECTION
     
-    params.filter_type = apvts.getRawParameterValue("FILTER_TYPE")->load();
-    params.filter_cutoff = apvts.getRawParameterValue("FILTER_CUTOFF")->load();
-    params.filter_resonance = apvts.getRawParameterValue("FILTER_RESONANCE")->load();
+    params.filter_type = apvts.getRawParameterValue("FILTER_TYPE")->load(); // IMPLEMENTED
+    params.filter_cutoff = apvts.getRawParameterValue("FILTER_CUTOFF")->load(); // IMPLEMENTED
+    params.filter_resonance = apvts.getRawParameterValue("FILTER_RESONANCE")->load(); // IMPLEMENTED
     
     // MIXER SECTION
-    
-    params.osc1_volume = apvts.getRawParameterValue("OSC1_VOLUME")->load();
-    params.osc2_volume = apvts.getRawParameterValue("OSC2_VOLUME")->load();
-    params.osc_noise_volume = apvts.getRawParameterValue("OSCNOISE_VOLUME")->load();
+        
+    params.osc1_volume = apvts.getRawParameterValue("OSC1_VOLUME")->load(); // IMPLEMENTED
+    params.osc2_volume = apvts.getRawParameterValue("OSC2_VOLUME")->load(); // IMPLEMENTED
+    params.osc_noise_volume = apvts.getRawParameterValue("OSCNOISE_VOLUME")->load(); // IMPLEMENTED 
     
 }
 
@@ -337,25 +329,25 @@ SynthTakeIiAudioProcessor::createParameters()
     std::vector<std::unique_ptr<RangedAudioParameter>> parameters;
     
     // OSC 1 PARAMS
-    parameters.push_back(std::make_unique<AudioParameterInt>("OSC1_WAVE", "Osc1_Wave", 1, 4, 2));
-    parameters.push_back(std::make_unique<AudioParameterInt>("OSC1_PITCH", "Osc1_Pitch", -12, 12, 0));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("OSC1_DETUNE", "Osc1_Detune", -50, 50, 0));
+    parameters.push_back(std::make_unique<AudioParameterInt>("OSC1_WAVE", "Osc1_Wave", limits.osc_wave_min, limits.osc_wave_max, limits.osc_wave_default));
+    parameters.push_back(std::make_unique<AudioParameterInt>("OSC1_PITCH", "Osc1_Pitch", limits.osc_pitch_min, limits.osc_pitch_max, limits.osc_pitch_default));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("OSC1_DETUNE", "Osc1_Detune", limits.osc_detune_min, limits.osc_detune_max, limits.osc_detune_default));
     
     // OSC 2 PARAMS
-    parameters.push_back(std::make_unique<AudioParameterInt>("OSC2_WAVE", "Osc2_Wave", 1, 4, 2));
-    parameters.push_back(std::make_unique<AudioParameterInt>("OSC2_PITCH", "Osc2_Pitch", -12, 12, 0));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("OSC2_DETUNE", "Osc2_Detune", -50, 50, 0));
+    parameters.push_back(std::make_unique<AudioParameterInt>("OSC2_WAVE", "Osc2_Wave", limits.osc_wave_min, limits.osc_wave_max, limits.osc_wave_default));
+    parameters.push_back(std::make_unique<AudioParameterInt>("OSC2_PITCH", "Osc2_Pitch", limits.osc_pitch_min, limits.osc_pitch_max, limits.osc_pitch_default));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("OSC2_DETUNE", "Osc2_Detune", limits.osc_detune_min, limits.osc_detune_max, limits.osc_detune_default));
     
     // FILTER PAR
     parameters.push_back(std::make_unique<AudioParameterInt>("FILTER_TYPE", "Filter_Type", 1, 2, 2));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_CUTOFF", "Filter_Cutoff", 20, 8000, 0.01));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_CUTOFF", "Filter_Cutoff", 20, 8000, 2500));
     parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_RESONANCE", "Filter_Resonance", 1.0, 5.0, 0.01));
     
     // ADSR
-    parameters.push_back(std:: make_unique<AudioParameterFloat>("ATTACK", "Attack", 0.0f, 5000.f, 1000.f));
-    parameters.push_back(std:: make_unique<AudioParameterFloat>("DECAY", "Decay", 0.0f, 3000.f, 1000.f));
-    parameters.push_back(std:: make_unique<AudioParameterFloat>("SUSTAIN", "Sustain", 0.0f, 1.0f, 0.8f));
-    parameters.push_back(std:: make_unique<AudioParameterFloat>("RELEASE", "Release", 0.0f, 5000.f, 1000.f));
+    parameters.push_back(std:: make_unique<AudioParameterFloat>("ATTACK", "Attack", 0.01f, 3000.f, 1000.f));
+    parameters.push_back(std:: make_unique<AudioParameterFloat>("DECAY", "Decay", 0.01f, 1000.f, 1000.f));
+    parameters.push_back(std:: make_unique<AudioParameterFloat>("SUSTAIN", "Sustain", 0.01f, 1.0f, 0.8f));
+    parameters.push_back(std:: make_unique<AudioParameterFloat>("RELEASE", "Release", 0.01f, 3000.f, 1000.f));
     
     // LFO
     parameters.push_back(std::make_unique<AudioParameterFloat>("RATE", "Rate", 0.0, 10.f, 0.2));
