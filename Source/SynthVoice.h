@@ -105,8 +105,15 @@ public:
         {
             
           // GENERATE SIGNALS
-            double osc_signal = hw_osc_1.do_Oscillate(osc_1_frequency * parameters->osc_1_detune, parameters->osc_1_wave); // add cents to pitch
-            double osc2_signal = hw_osc_2.do_Oscillate(osc_2_frequency * parameters->osc_2_detune, parameters->osc_2_wave);
+            
+            // DETUNE PROCESSING
+            
+            float osc_1_detune_amount = 1 + (parameters->osc_1_detune / 1000);
+            float osc_2_detune_amount = 1 + (parameters->osc_2_detune / 1000);
+            
+            
+            double osc_signal = hw_osc_1.do_Oscillate(osc_1_frequency * osc_1_detune_amount, parameters->osc_1_wave); // add cents to pitch
+            double osc2_signal = hw_osc_2.do_Oscillate(osc_2_frequency * osc_2_detune_amount, parameters->osc_2_wave);
             double oscNoise_signal = hw_osc_noise.do_Oscillate(frequency, 5);
             
             // Filter Noise
@@ -126,7 +133,13 @@ public:
         // APPLY VOLUME ENVELOPE TO THE SIGNALS
             double oscEnv = env1.adsr(oscMixed, env1.trigger) * level;
         // RUN IT THROUGH A FILTER
-            double oscFilt = filter1.lores(oscEnv, parameters->filter_cutoff, parameters->filter_resonance);
+            
+            float filter_cutoff_target = parameters->filter_cutoff;
+//
+//            // IMPLEMENT THIS LATER
+//            float filter_env = env1.adsr(filter_cutoff_target, env1.trigger) * parameters->filter_envelope_amount;
+            
+            double oscFilt = filter1.lores(oscEnv, filter_cutoff_target, parameters->filter_resonance);
             
             double outputSample = oscFilt;
             

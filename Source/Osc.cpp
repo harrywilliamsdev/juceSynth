@@ -155,7 +155,7 @@ double Oscillator::do_Oscillate(double frequency, int oscType)
             output = generate_noise();
             break;
         case 6:
-            output = generate_pn_noise(frequency);
+            output = generate_pn_noise(1);
             break;
         
     }

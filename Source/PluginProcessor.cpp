@@ -175,22 +175,15 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     
     // Clear any leftovers in the buffer
     buffer.clear();
-    
-    
+
     // update parameters in the synth voice
    // if (mustUpdateProcessing)
         update();
     
-    
-    
     // generate the next synth block
     hw_Synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
- //   debugParams();
-    
-    
-
-    
+    // Get params for on a block-by-block basis
     float distortion_wetdry_balance = *apvts.getRawParameterValue("DISTORTION_WETDRY");
     float delay_wetdry_balance = *apvts.getRawParameterValue("DELAY_WETDRY");
     
@@ -198,17 +191,9 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     {
         for (int i = 0; i < buffer.getNumSamples(); ++i)
         {
-//            hw_Voice->attack = *apvts.getRawParameterValue("ATTACK");
-            
-            // PARAMETER SETTING
-            
-            
-            
-            
+         
             float x = buffer.getWritePointer(channel)[i];
             
-            
-
             // Process Waveshaper
             float input_to_distortion = x;
             float output_of_distortion = hw_Distortion.processSample(input_to_distortion, *apvts.getRawParameterValue("DISTORTION"), *apvts.getRawParameterValue("DISTORTION_TYPE"));
@@ -221,12 +206,13 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             delay.setSpeed(*apvts.getRawParameterValue("DELAY_MODULATION"));
             delay.setDelaySamples(*apvts.getRawParameterValue("DELAY_TIME") * 44.1);
             
-        
+            // the input to delay is the regular signal, plus the output is fed back into the line
             float input_to_delay = x + (-*apvts.getRawParameterValue("DELAY_FEEDBACK")
                                         * delayFeedbackSample[channel]);
             
             float output_of_delay = delay.processSample(input_to_delay, channel, *apvts.getRawParameterValue("DELAY_GROOVE"));
             
+            // Set feedback sample
             delayFeedbackSample[channel] = delay_repeats_distortion.processSample(output_of_delay, 0.9, 3);
                 // DELAY WET DRY BLEND
             
@@ -273,7 +259,8 @@ void SynthTakeIiAudioProcessor::setStateInformation (const void* data, int sizeI
  This is a key method for connecting the GUI to the voice processing
  in SynthVoice.h
  
- We pass it into a SynthVoiceParams struct which is serves as a bridge between the file
+ We pass values to the SynthVoiceParams struct which is serves as a bridge between the apvts
+ and the SynthVoice file 
  
  
  */
@@ -301,6 +288,7 @@ void SynthTakeIiAudioProcessor::update()
     params.filter_type = apvts.getRawParameterValue("FILTER_TYPE")->load(); // IMPLEMENTED
     params.filter_cutoff = apvts.getRawParameterValue("FILTER_CUTOFF")->load(); // IMPLEMENTED
     params.filter_resonance = apvts.getRawParameterValue("FILTER_RESONANCE")->load(); // IMPLEMENTED
+    params.filter_envelope_amount = apvts.getRawParameterValue("FILTER_EG_AMOUNT")->load(); // NOT IMPLEMENTED
     
     // MIXER SECTION
         
@@ -339,20 +327,21 @@ SynthTakeIiAudioProcessor::createParameters()
     parameters.push_back(std::make_unique<AudioParameterFloat>("OSC2_DETUNE", "Osc2_Detune", limits.osc_detune_min, limits.osc_detune_max, limits.osc_detune_default));
     
     // FILTER PAR
-    parameters.push_back(std::make_unique<AudioParameterInt>("FILTER_TYPE", "Filter_Type", 1, 2, 2));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_CUTOFF", "Filter_Cutoff", 20, 8000, 2500));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_RESONANCE", "Filter_Resonance", 1.0, 5.0, 0.01));
+    parameters.push_back(std::make_unique<AudioParameterInt>("FILTER_TYPE", "Filter_Type", limits.filter_type_min, limits.filter_type_max, limits.filter_type_default));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_CUTOFF", "Filter_Cutoff", limits.filter_cutoff_min, limits.filter_cutoff_max, limits.filter_cutoff_default));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_RESONANCE", "Filter_Resonance", limits.filter_resonance_min, limits.filter_resonance_max, 0.01));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_EG_AMOUNT", "Filter_Envelope_Amount", 0.2f, 1.5f, 1));
     
     // ADSR
-    parameters.push_back(std:: make_unique<AudioParameterFloat>("ATTACK", "Attack", 0.01f, 3000.f, 1000.f));
-    parameters.push_back(std:: make_unique<AudioParameterFloat>("DECAY", "Decay", 0.01f, 1000.f, 1000.f));
-    parameters.push_back(std:: make_unique<AudioParameterFloat>("SUSTAIN", "Sustain", 0.01f, 1.0f, 0.8f));
-    parameters.push_back(std:: make_unique<AudioParameterFloat>("RELEASE", "Release", 0.01f, 3000.f, 1000.f));
+    parameters.push_back(std:: make_unique<AudioParameterFloat>("ATTACK", "Attack", limits.attack_min, limits.attack_max, limits.attack_default));
+    parameters.push_back(std:: make_unique<AudioParameterFloat>("DECAY", "Decay", limits.decay_min, limits.decay_max, limits.decay_default));
+    parameters.push_back(std:: make_unique<AudioParameterFloat>("SUSTAIN", "Sustain", limits.sustain_min,limits.sustain_max ,limits.sustain_default ));
+    parameters.push_back(std:: make_unique<AudioParameterFloat>("RELEASE", "Release", limits.release_min, limits.release_max, limits.release_default));
     
     // LFO
-    parameters.push_back(std::make_unique<AudioParameterFloat>("RATE", "Rate", 0.0, 10.f, 0.2));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DEPTH", "Depth", 0.0f, 5.0f, 1.f));
-    parameters.push_back(std::make_unique<AudioParameterInt>("LFO_WAVE", "Wave", 1, 3, 2));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("RATE", "Rate", limits.lfo_min,limits.lfo_max ,limits.lfo_default ));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DEPTH", "Depth", limits.lfo_depth_min, limits.lfo_depth_max, limits.lfo_depth_default));
+    parameters.push_back(std::make_unique<AudioParameterInt>("LFO_WAVE", "Wave", limits.lfo_wave_min, limits.lfo_wave_max, limits.lfo_wave_default));
     
     // FX SECTION
         // DISTORTION PARAMS

@@ -31,6 +31,7 @@ struct SynthVoiceParameters
     int filter_type { 1 };
     float filter_cutoff { 2000.f };
     float filter_resonance  { 1.f };
+    float filter_envelope_amount { 0 };
     
     // mixer
     

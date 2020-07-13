@@ -35,8 +35,9 @@ private:
     Slider osc_2_SliderType, osc_2_SliderPitch, osc_2_SliderDetune;
     Label osc_2_SliderType_Label, osc_2_SliderPitch_Label, osc_2_SliderDetune_Label;
     // FILTER SLIDERS
-    Slider filter_SliderType, filter_SliderCutoff, filter_SliderResonance;
-    Label filter_SliderType_Label, filter_SliderCutoff_Label, filter_SliderResonance_Label;
+    Slider filter_SliderCutoff, filter_SliderResonance, filter_SliderEG;
+    Label filter_SliderType_Label, filter_SliderCutoff_Label, filter_SliderResonance_Label, filter_SliderEG_Label;
+    ComboBox filter_type_comboBox;
     // LFO SLIDERS
     Slider lfo_SliderRate, lfo_SliderDepth;
     Label lfo_SliderRate_Label, lfo_SliderDepth_Label;
@@ -107,9 +108,10 @@ private:
       
     
     // FILTER ATTACHMENT
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> filter_type_sliderAttachment;
+    std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> filter_type_ComboBox_Attachment;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> filter_cutoff_sliderAttachment;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> filter_resonance_sliderAttachment;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> filter_eg_amount_slider_Attachment;
     
     // ADSR Attachments
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> attack_sliderAttachment;

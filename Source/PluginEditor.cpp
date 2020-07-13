@@ -123,21 +123,6 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     
 // FILTER BANK
         
-    filter_SliderType.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    filter_SliderType.setColour(Slider::rotarySliderFillColourId, Colours::limegreen);
-    filter_SliderType.setColour(Slider::thumbColourId, Colours::green);
-    filter_SliderType.setRange(1,3,1);
-    filter_SliderType.setValue(2);
-    filter_SliderType.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
-    addAndMakeVisible(filter_SliderType);
-    
-    filter_SliderType_Label.setFont(15.f);
-    filter_SliderType_Label.setText("HP/LP", NotificationType::dontSendNotification);
-    filter_SliderType_Label.setJustificationType(Justification::centred);
-    filter_SliderType_Label.attachToComponent(&filter_SliderType, false);
-    addAndMakeVisible(filter_SliderType_Label);
-    
-    filter_type_sliderAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "FILTER_TYPE", filter_SliderType);
     
     filter_SliderCutoff.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     filter_SliderCutoff.setColour(Slider::rotarySliderFillColourId, Colours::limegreen);
@@ -171,14 +156,28 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
        addAndMakeVisible(filter_SliderResonance_Label);
     
     filter_resonance_sliderAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "FILTER_RESONANCE", filter_SliderResonance);
+
+    
+    
+    filter_SliderEG.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+          filter_SliderEG.setColour(Slider::rotarySliderFillColourId, Colours::limegreen);
+       filter_SliderEG.setColour(Slider::thumbColourId, Colours::green);
+          filter_SliderEG.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
+          addAndMakeVisible(filter_SliderEG);
+          
+          filter_SliderEG_Label.setFont(15.f);
+          filter_SliderEG_Label.setText("EG Amount", NotificationType::dontSendNotification);
+          filter_SliderEG_Label.setJustificationType(Justification::centred);
+          filter_SliderEG_Label.attachToComponent(&filter_SliderEG, false);
+          addAndMakeVisible(filter_SliderEG_Label);
+    
+    filter_eg_amount_slider_Attachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "FILTER_EG_AMOUNT", filter_SliderEG);
     
 // ADSR Sliders
     
     attackSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
     attackSlider.setColour(Slider::trackColourId, hw_colour_1);
     attackSlider.setColour(Slider::thumbColourId, hw_colour_4);
-    attackSlider.setRange(0.0, 5.0, 1);
-    attackSlider.setValue(2.5);
     attackSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
     addAndMakeVisible(attackSlider);
     
@@ -503,6 +502,13 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     oscNoise_colour_Slider_Label.attachToComponent(&oscNoise_colour_Slider, false);
     addAndMakeVisible(oscNoise_colour_Slider_Label);
     
+    // FILTER COMBOX
+    
+    filter_type_comboBox.addItem("HPF", 1);
+    filter_type_comboBox.addItem("LPF", 2);
+    addAndMakeVisible(filter_type_comboBox);
+    
+    filter_type_ComboBox_Attachment = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment>(processor.apvts,"FILTER_TYPE", filter_type_comboBox);
     
     // COMBOX FOR LFO WAVE
     
@@ -624,9 +630,10 @@ void SynthTakeIiAudioProcessorEditor::resized()
     osc_2_SliderPitch.setBounds(110, 160, knobWidth, knobHeight);
     osc_2_SliderDetune.setBounds(110,290, knobWidth,knobHeight);
     // FILTER SECTION
-    filter_SliderType.setBounds(210, 30, knobWidth, knobHeight);
-    filter_SliderCutoff.setBounds(210, 160,knobWidth ,knobHeight);
-    filter_SliderResonance.setBounds(210, 290, knobWidth, knobHeight);
+    filter_type_comboBox.setBounds(220, 265, comboBoxWidth + 10, comboBoxHeight);
+    filter_SliderEG.setBounds(210, 310, s_knobWidth, s_knobHeight);
+    filter_SliderCutoff.setBounds(210, 30,knobWidth ,knobHeight);
+    filter_SliderResonance.setBounds(210, 160, knobWidth, knobHeight);
     // ENVELOPE SECTION
     attackSlider.setBounds(300,30,sliderWidth, sliderHeight);
     decaySlider.setBounds(350,30,sliderWidth, sliderHeight);
@@ -653,7 +660,6 @@ void SynthTakeIiAudioProcessorEditor::resized()
     osc1_volumeSlider.setBounds(520, 265, sliderWidth, 130);
     osc2_volumeSlider.setBounds(570, 265, sliderWidth, 130);
     oscNoise_volumeSlider.setBounds(620, 265, sliderWidth, 130);
-    
     oscNoise_colour_Slider.setBounds(705, 265, 85, 20);
     
     // MASTER

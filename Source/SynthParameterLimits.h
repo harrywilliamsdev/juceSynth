@@ -31,17 +31,17 @@ struct SynthParameterLimits
      OSC PARAM LIMITS
      */
         // Osc Type
-    const int osc_wave_min {1};
-    const int osc_wave_max {4};
-    const int osc_wave_default {2};
+    const float osc_wave_min {1};
+    const float osc_wave_max {4};
+    const float osc_wave_default {2};
         // Osc Pitch
     const int osc_pitch_min {-12};
     const int osc_pitch_max {12};
     const int osc_pitch_default{0};
         // Osc Detune
-    const float osc_detune_min{0.99f};
-    const float osc_detune_max{1.01f};
-    const float osc_detune_default {1.f};
+    const float osc_detune_min{-50.f};
+    const float osc_detune_max{50.f};
+    const float osc_detune_default {0.f};
     
     /*
      FILTER PARAM LIMITS
@@ -49,11 +49,11 @@ struct SynthParameterLimits
     
         // Filter Type
     const int filter_type_min {1};
-    const int filter_type_max {3};
+    const int filter_type_max {2};
     const int filter_type_default {1};
         // Cutoff
     const float filter_cutoff_min {20};
-    const float filter_cutoff_max {10000};
+    const float filter_cutoff_max {8000};
     const float filter_cutoff_default {2500};
         // Resonance
     const float filter_resonance_min {1.0};
@@ -64,36 +64,43 @@ struct SynthParameterLimits
      ADSR PARAM LIMITS
      */
         // ATTACK
-    const float attack_min{};
-    const float attack_max{};
-    const float attack_default{};
+    const float attack_min{0.01};
+    const float attack_max{5000};
+    const float attack_default{100};
         // DECAY
-    const float decay_min{};
-    const float decay_max{};
-    const float decay_default{};
+    const float decay_min{0.01};
+    const float decay_max{5000};
+    const float decay_default{50};
         // SUSTAIN
-    const float sustain_min{};
-    const float sustain_max{};
-    const float sustain_default{};
+    const float sustain_min{0.01};
+    const float sustain_max{0.99};
+    const float sustain_default{0.8};
         // RELEASE
-    const float release_min{};
-    const float release_max{};
-    const float release_default{};
+    const float release_min{0.01};
+    const float release_max{5000};
+    const float release_default{100};
     
     /*
      LFO PARAM LIMITS
      */
     
         // RATE
+        
+    const float lfo_min {0.0};
+    const float lfo_max {10.f};
+    const float lfo_default {0.2f};
+
+    // DEPTH
+    const float lfo_depth_min {0.0f};
+    const float lfo_depth_max {5.0f};
+    const float lfo_depth_default {1.f};
+    // LFO WAVE
+    const int lfo_wave_min {1};
+    const int lfo_wave_max {3};
+    const int lfo_wave_default {2};
     
-        // DEPTH
-    
-        // LFO WAVE
-    
-    
-    
-    
-    
-    
+    /*
+     DISTORTION PARAMETER LIMITS
+     */
     
 };
