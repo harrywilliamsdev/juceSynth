@@ -97,43 +97,6 @@ double Oscillator::generate_noise()
     return(output);
 }
 
-double Oscillator::generate_pn_noise(unsigned int uPNRegister)
-{
-    // get the bits from the seed value
-    unsigned int b0 = EXTRACT_BITS(uPNRegister, 1, 1);
-    unsigned int b1 = EXTRACT_BITS(uPNRegister, 2, 1);
-    unsigned int b27 = EXTRACT_BITS(uPNRegister, 28, 1);
-    unsigned int b28 = EXTRACT_BITS(uPNRegister, 29, 1);
-    
-    // create an XOR
-    
-    unsigned int b31 = b0^b1^b27^b28;
-    
-    // form the mask to OR with the register to load b31
-    
-    if (b31 == 1 )
-    {
-        b31 = 0x10000000;
-        
-    }
-    
-    // shift one bit to the right
-    uPNRegister >>= 1;
-    
-    // set the bit
-    
-    uPNRegister |= b31;
-    
-    // convert to float
-    float fOut = (float)(uPNRegister)/((std::pow((float)2.0, (float)32.0)) / 16.0 );
-    
-    // scale
-    
-    fOut -= 1.0;
-    
-    return fOut;
-    
-}
 
 double Oscillator::do_Oscillate(double frequency, int oscType)
 {
@@ -153,9 +116,6 @@ double Oscillator::do_Oscillate(double frequency, int oscType)
             break;
         case 5:
             output = generate_noise();
-            break;
-        case 6:
-            output = generate_pn_noise(1);
             break;
         
     }

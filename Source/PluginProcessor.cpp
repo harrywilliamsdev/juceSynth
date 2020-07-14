@@ -22,7 +22,7 @@ apvts(*this, nullptr, "Parameters", createParameters())
     
     hw_Synth.clearVoices();
     
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < 8; ++i)
     {
         hw_Synth.addVoice(new SynthVoice(&params));
     }
@@ -345,30 +345,62 @@ SynthTakeIiAudioProcessor::createParameters()
     
     // FX SECTION
         // DISTORTION PARAMS
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DISTORTION", "Distortion", 0.001, 5.0f, 1.f));
-    parameters.push_back(std::make_unique<AudioParameterInt>("DISTORTION_TYPE", "Distortion_Type", 1,4,1));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DISTORTION_WETDRY", "Distortion Blend", 0.0f, 1.0f, 0.5f));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DISTORTION", "Distortion", limits.distortion_amount_min, limits.distortion_amount_max,limits.distortion_amount_default));
+    parameters.push_back(std::make_unique<AudioParameterInt>("DISTORTION_TYPE", "Distortion_Type", limits.distortion_type_min,limits.distortion_type_max,limits.distortion_type_default));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DISTORTION_WETDRY", "Distortion Blend", limits.distortion_wetdry_min,limits.distortion_wetdry_max ,limits.distortion_wetdry_default));
     
     
     
         // Delay PARAMS
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_TIME", "Delay Time", 0, 1750, 250));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_FEEDBACK", "Delay Feedback", 0.0f, 2.f, 0.5f));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_MODULATION", "Modulation", 0.01, 15.f, 2.0f));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_GROOVE", "Delay Groove", 1.f, 2, 1.01));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_WETDRY", "Delay Blend", 0.0f, 1.0f, 0.5f));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_TIME", "Delay Time", limits.delay_time_min,limits.delay_time_max ,limits.delay_time_default ));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_FEEDBACK", "Delay Feedback", limits.delay_feedback_min,limits.delay_feedback_max ,limits.delay_feedback_default ));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_MODULATION", "Modulation", limits.delay_modulation_min,limits.delay_modulation_max ,limits.delay_modulation_default ));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_GROOVE", "Delay Groove", limits.delay_groove_min,limits.delay_groove_max ,limits.delay_groove_default));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DELAY_WETDRY", "Delay Blend", limits.delay_wetdry_min, limits.delay_wetdry_max, limits.delay_wetdry_default));
     
     // OUTPUT SECTION
-    
         // MIXER
     
+    parameters.push_back(std::make_unique<AudioParameterFloat>("OSC1_VOLUME", "Osc_I", limits.osc_volume_min,limits.osc_volume_max ,limits.osc_pitched_volume_default ));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("OSC2_VOLUME", "Osc_II", limits.osc_volume_min,limits.osc_volume_max ,limits.osc_pitched_volume_default ));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("OSCNOISE_VOLUME", "Osc_Noise",limits.osc_volume_min,limits.osc_volume_max ,limits.osc_noise_volume_default ));
     
-    parameters.push_back(std::make_unique<AudioParameterFloat>("OSC1_VOLUME", "Osc_I", 0.0, 1.0f, 1.f));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("OSC2_VOLUME", "Osc_II", 0.0, 1.0f, 1.f));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("OSCNOISE_VOLUME", "Osc_Noise", 0.0, 1.0f, 0.05f));
-    
-    parameters.push_back(std::make_unique<AudioParameterFloat>("OUTPUT", "Output", 0.0f, 1.0f, 0.5f));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("PAN", "Pan", -50.f, 50.f, 0.f));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("OUTPUT", "Output", limits.output_volume_min, limits.output_volume_max, limits.output_volume_default));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("PAN", "Pan", limits.output_pan_min, limits.output_pan_max,limits.output_pan_default ));
     
     return { parameters.begin(), parameters.end() };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

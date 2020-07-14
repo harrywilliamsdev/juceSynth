@@ -27,7 +27,6 @@ SynthTakeIiAudioProcessorEditor::SynthTakeIiAudioProcessorEditor (SynthTakeIiAud
     osc_1_SliderType.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     osc_1_SliderType.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
     osc_1_SliderType.setColour(Slider::thumbColourId, hw_colour_6);
-    osc_1_SliderType.setRange(1, 4, 1);
     osc_1_SliderType.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     addAndMakeVisible(osc_1_SliderType); // ADD TO EDITOR COMPONENT
     
@@ -43,9 +42,8 @@ SynthTakeIiAudioProcessorEditor::SynthTakeIiAudioProcessorEditor (SynthTakeIiAud
     osc_1_SliderPitch.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     osc_1_SliderPitch.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
     osc_1_SliderPitch.setColour(Slider::thumbColourId, hw_colour_6);
-    osc_1_SliderPitch.setRange(-12, 12, 1);
-    osc_1_SliderPitch.setValue(0);
     osc_1_SliderPitch.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
+    osc_1_SliderPitch.setTextValueSuffix(" st");
     addAndMakeVisible(osc_1_SliderPitch);
     
     osc1_pitch_sliderAttachment = make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "OSC1_PITCH", osc_1_SliderPitch);
@@ -59,8 +57,6 @@ SynthTakeIiAudioProcessorEditor::SynthTakeIiAudioProcessorEditor (SynthTakeIiAud
 osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     osc_1_SliderDetune.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
     osc_1_SliderDetune.setColour(Slider::thumbColourId, hw_colour_6);
-    osc_1_SliderDetune.setRange(-0.96, 1.03, 0.001);
-    osc_1_SliderDetune.setValue(0);
     osc_1_SliderDetune.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     addAndMakeVisible(osc_1_SliderDetune);
     
@@ -77,7 +73,6 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
       osc_2_SliderType.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         osc_2_SliderType.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
         osc_2_SliderType.setColour(Slider::thumbColourId, hw_colour_6);
-        osc_2_SliderType.setRange(1, 4, 1);
         osc_2_SliderType.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
         addAndMakeVisible(osc_2_SliderType);
     
@@ -92,9 +87,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
         osc_2_SliderPitch.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         osc_2_SliderPitch.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
         osc_2_SliderPitch.setColour(Slider::thumbColourId, hw_colour_6);
-        osc_2_SliderPitch.setRange(-12, 12, 1);
-        osc_2_SliderPitch.setValue(0);
         osc_2_SliderPitch.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
+    osc_2_SliderPitch.setTextValueSuffix( " st");
         addAndMakeVisible(osc_2_SliderPitch);
     
     osc2_pitch_sliderAttachment = make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "OSC2_PITCH", osc_2_SliderPitch);
@@ -504,8 +498,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     
     // FILTER COMBOX
     
-    filter_type_comboBox.addItem("HPF", 1);
-    filter_type_comboBox.addItem("LPF", 2);
+    filter_type_comboBox.addItem("LPF", 1);
+    filter_type_comboBox.addItem("HPF", 2);
     addAndMakeVisible(filter_type_comboBox);
     
     filter_type_ComboBox_Attachment = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment>(processor.apvts,"FILTER_TYPE", filter_type_comboBox);
@@ -547,8 +541,8 @@ void SynthTakeIiAudioProcessorEditor::paint (Graphics& g)
     // Set background colour overall
     g.fillAll (Colours::black);
     
-    g.setColour(Colours::gold);
     // SECTION FRAME/BORDERS
+    g.setColour(Colours::gold);
     g.drawRect(0, 0, 100, 400);
     g.drawRect(100, 0, 100, 400);
     g.drawRect(200, 0, 100, 400);
@@ -557,9 +551,7 @@ void SynthTakeIiAudioProcessorEditor::paint (Graphics& g)
     g.drawRect(525, 0, 275, 240);
     g.drawRect(525, 240, 275, 160);
     
-//    g.drawRect(0, 400, 300, 100);
-//    g.drawRect(300, 400, 400, 100);
-    
+
     // OSC FILL
     g.setColour(Colours::orangered);
     g.setOpacity(0.15);

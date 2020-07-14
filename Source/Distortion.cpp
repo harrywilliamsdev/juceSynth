@@ -35,17 +35,15 @@ double Distortion::processSample(double input_sample, double saturation_amount, 
         case (2):
             output = atan(saturation_amount*input_sample) / atan(saturation_amount);
             break;
-            // Sigmoid Waveshape
+            // Sigmoid Waveshaper
         case (3):
             output = 2 * (1 / (1 + exp(-saturation_amount * input_sample))) - 1;
             break;
-//             Fuzz - implement signum in utility function and find out what |kx| means
+//            // Fuzz Waveshaper
         case (4):
             float k_x = std::abs(saturation_amount * input_sample);
             output = signum(input_sample) * (1 - std::exp(-k_x)) / (1 - std::exp(-saturation_amount));
-            
-            
-            
+            break;
     }
     
     return output;
