@@ -90,7 +90,7 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
                 
                 // Filter Noise
                 
-    //           oscNoise_signal = filter1.lores(oscNoise_signal, 1000, 1.1);
+               oscNoise_signal = filter1.lores(oscNoise_signal, 1000, 1.1);
                 
                 
                 // MIXER SECTION
@@ -106,14 +106,25 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
                 double oscEnv = env1.adsr(oscMixed, env1.trigger) * level;
             // RUN IT THROUGH A FILTER
                 
+                
+                // Cutoff knob value from gui
                 float filter_cutoff_target = parameters->filter_cutoff;
-    //
-    //            // IMPLEMENT THIS LATER
-    //            float filter_env = env1.adsr(filter_cutoff_target, env1.trigger) * parameters->filter_envelope_amount;
+    
                 
-            //    double oscFilt = filter1.lores(oscEnv, filter_cutoff_target, parameters->filter_resonance);
+                // runs knob value through an envelope ramp
+                float filter_env = (filter_cutoff_target / 4 ) + (env1.adsr(filter_cutoff_target, env1.trigger) * parameters->filter_envelope_amount);
                 
-                double oscFilt = hw_filter.process_sample(oscEnv, parameters->filter_cutoff, parameters->filter_resonance, parameters->filter_type);
+                if (filter_env >= 20000)
+                {
+                    filter_env = 20000;
+                }
+                
+                if (filter_env <= 20)
+                {
+                    filter_env = 20;
+                }
+                
+                double oscFilt = hw_filter.process_sample(oscEnv, filter_env, parameters->filter_resonance, parameters->filter_type);
                 
                 double outputSample = oscFilt;
                 

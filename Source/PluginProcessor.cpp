@@ -110,6 +110,7 @@ void SynthTakeIiAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     lastSampleRate = sampleRate;
     hw_Synth.setCurrentPlaybackSampleRate(lastSampleRate);
     delay.setFs(sampleRate);
+    delay_repeats_filter.sampleRate = sampleRate;
 }
 
 void SynthTakeIiAudioProcessor::releaseResources()
@@ -214,7 +215,9 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             float output_of_delay = delay.processSample(input_to_delay, channel, *apvts.getRawParameterValue("DELAY_GROOVE"));
             
             // Set feedback sample
-            delayFeedbackSample[channel] = delay_repeats_distortion.processSample(output_of_delay, 1.5, 1);
+            float distorted_feedback_sample = delay_repeats_distortion.processSample(output_of_delay, 1.0, 2);
+            
+            delayFeedbackSample[channel] = delay_repeats_filter.process_sample(distorted_feedback_sample, 2500, 0.707, 1);
                 // DELAY WET DRY BLEND
             
             x = ((1.0 - delay_wetdry_balance) * x) + (delay_wetdry_balance * output_of_delay);

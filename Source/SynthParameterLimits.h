@@ -79,12 +79,12 @@ struct SynthParameterLimits
     const float filter_cutoff_max {10000};
     const float filter_cutoff_default {8000};
         // Resonance
-    const float filter_resonance_min {0.0};
-    const float filter_resonance_max {10.0};
+    const float filter_resonance_min {0.707};
+    const float filter_resonance_max {0.7071};
     const float filter_resonance_default {0.707};
         // Filter ENV Amount
-    const float filter_envelope_amount_min {0.0};
-    const float filter_envelope_amount_max {1.0};
+    const float filter_envelope_amount_min {-1};
+    const float filter_envelope_amount_max {1};
     const float filter_envelope_amount_default {0.0};
     
     

@@ -66,6 +66,7 @@ private:
     Oscillator hw_osc_noise;
     
     Filter hw_filter;
+    Filter hw_noise_filter;
     
     maxiSettings settings;
     

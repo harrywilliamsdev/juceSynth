@@ -9,6 +9,7 @@
 #include "Delay.h"
 #include "SynthVoiceParams.h"
 #include "SynthParameterLimits.h"
+#include "Filter.h"
 
 //==============================================================================
 /**
@@ -64,6 +65,8 @@ public:
     
     Delay delay;
     Distortion delay_repeats_distortion;
+    
+    Filter delay_repeats_filter;
     
     float delayFeedbackSample[2]; 
     
