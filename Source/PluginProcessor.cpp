@@ -175,9 +175,10 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     
     // Clear any leftovers in the buffer
     buffer.clear();
+    
 
     // update parameters in the synth voice
-   // if (mustUpdateProcessing)
+    if (mustUpdateProcessing)
         update();
     
     // generate the next synth block
@@ -213,7 +214,7 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             float output_of_delay = delay.processSample(input_to_delay, channel, *apvts.getRawParameterValue("DELAY_GROOVE"));
             
             // Set feedback sample
-            delayFeedbackSample[channel] = delay_repeats_distortion.processSample(output_of_delay, 0.9, 3);
+            delayFeedbackSample[channel] = delay_repeats_distortion.processSample(output_of_delay, 1.5, 1);
                 // DELAY WET DRY BLEND
             
             x = ((1.0 - delay_wetdry_balance) * x) + (delay_wetdry_balance * output_of_delay);
@@ -277,18 +278,18 @@ void SynthTakeIiAudioProcessor::update()
     // OSC 1
     params.osc_1_wave = apvts.getRawParameterValue("OSC1_WAVE")->load(); // IMPLEMENTED
     params.osc_1_pitch = apvts.getRawParameterValue("OSC1_PITCH")->load(); // IMPLEMENTED
-    params.osc_1_detune = apvts.getRawParameterValue("OSC1_DETUNE")->load(); // MORE RESEARCH REQUIRED
+    params.osc_1_detune = apvts.getRawParameterValue("OSC1_DETUNE")->load(); // IMPLEMENTED
     // OSC 2
     params.osc_2_wave = apvts.getRawParameterValue("OSC2_WAVE")->load(); // IMPLEMENTED
     params.osc_2_pitch = apvts.getRawParameterValue("OSC2_PITCH")->load(); // IMPLEMENTED
-    params.osc_2_detune = apvts.getRawParameterValue("OSC2_DETUNE")->load(); // MORE RESEARCH REQUIRED
+    params.osc_2_detune = apvts.getRawParameterValue("OSC2_DETUNE")->load(); // IMPLEMENTED
     
     // FILTER SECTION
     
     params.filter_type = apvts.getRawParameterValue("FILTER_TYPE")->load(); // IMPLEMENTED
     params.filter_cutoff = apvts.getRawParameterValue("FILTER_CUTOFF")->load(); // IMPLEMENTED
     params.filter_resonance = apvts.getRawParameterValue("FILTER_RESONANCE")->load(); // IMPLEMENTED
-    params.filter_envelope_amount = apvts.getRawParameterValue("FILTER_EG_AMOUNT")->load(); // NOT IMPLEMENTED
+    params.filter_envelope_amount = apvts.getRawParameterValue("FILTER_EG_AMOUNT")->load(); // IMPLEMENTED
     
     // MIXER SECTION
         
@@ -329,8 +330,8 @@ SynthTakeIiAudioProcessor::createParameters()
     // FILTER PAR
     parameters.push_back(std::make_unique<AudioParameterInt>("FILTER_TYPE", "Filter_Type", limits.filter_type_min, limits.filter_type_max, limits.filter_type_default));
     parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_CUTOFF", "Filter_Cutoff", limits.filter_cutoff_min, limits.filter_cutoff_max, limits.filter_cutoff_default));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_RESONANCE", "Filter_Resonance", limits.filter_resonance_min, limits.filter_resonance_max, 0.01));
-    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_EG_AMOUNT", "Filter_Envelope_Amount", 0.2f, 1.5f, 1));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_RESONANCE", "Filter_Resonance", limits.filter_resonance_min, limits.filter_resonance_max, limits.filter_resonance_default));
+    parameters.push_back(std::make_unique<AudioParameterFloat>("FILTER_EG_AMOUNT", "Filter_Envelope_Amount", limits.filter_envelope_amount_min, limits.filter_envelope_amount_max, limits.filter_envelope_amount_default));
     
     // ADSR
     parameters.push_back(std:: make_unique<AudioParameterFloat>("ATTACK", "Attack", limits.attack_min, limits.attack_max, limits.attack_default));
@@ -370,37 +371,4 @@ SynthTakeIiAudioProcessor::createParameters()
     
     return { parameters.begin(), parameters.end() };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

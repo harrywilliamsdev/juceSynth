@@ -17,10 +17,10 @@
 
 class Oscillator
 {
-    double frequency;
-    double phase;
-    double increment;
-    double output;
+    double frequency {0};
+    double phase {0};
+    double increment{0};
+    double output{0};
     double m_sample_rate { 44100 };
     
     

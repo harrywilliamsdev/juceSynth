@@ -76,12 +76,17 @@ struct SynthParameterLimits
     const int filter_type_default {1};
         // Cutoff
     const float filter_cutoff_min {20};
-    const float filter_cutoff_max {8000};
-    const float filter_cutoff_default {2500};
+    const float filter_cutoff_max {20000};
+    const float filter_cutoff_default {20000};
         // Resonance
-    const float filter_resonance_min {1.0};
-    const float filter_resonance_max {3.0};
-    const float filter_resonance_default {1.0};
+    const float filter_resonance_min {0.707};
+    const float filter_resonance_max {10.0};
+    const float filter_resonance_default {0.707};
+        // Filter ENV Amount
+    const float filter_envelope_amount_min {0.0};
+    const float filter_envelope_amount_max {1.0};
+    const float filter_envelope_amount_default {0.0};
+    
     
     /*
      ADSR PARAM LIMITS

@@ -19,6 +19,7 @@ SynthVoice::SynthVoice(SynthVoiceParameters* params) : parameters (params)
 void SynthVoice::setCurrentPlaybackSampleRate(const double newRate)
 {
     settings.setSampleRate(newRate);
+    hw_filter.sampleRate = newRate;
     SynthesiserVoice::setCurrentPlaybackSampleRate(newRate);
 }
 
@@ -66,7 +67,7 @@ void SynthVoice::controllerMoved(int controllerNumber, int newControllerValue)
 
 void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
 {
-         env1.setAttack(parameters->attack);
+            env1.setAttack(parameters->attack);
             env1.setDecay(parameters->decay);
             env1.setSustain(parameters->sustain);
             env1.setRelease(parameters->release);
@@ -110,7 +111,9 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
     //            // IMPLEMENT THIS LATER
     //            float filter_env = env1.adsr(filter_cutoff_target, env1.trigger) * parameters->filter_envelope_amount;
                 
-                double oscFilt = filter1.lores(oscEnv, filter_cutoff_target, parameters->filter_resonance);
+            //    double oscFilt = filter1.lores(oscEnv, filter_cutoff_target, parameters->filter_resonance);
+                
+                double oscFilt = hw_filter.process_sample(oscEnv, parameters->filter_cutoff, parameters->filter_resonance, 1);
                 
                 double outputSample = oscFilt;
                 

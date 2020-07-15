@@ -16,6 +16,7 @@
 #include "Osc.h"
 #include "UtilityFunctions.h"
 #include "SynthVoiceParams.h"
+#include "Filter.h"
 
 /*
  
@@ -63,6 +64,8 @@ private:
     Oscillator hw_osc_1;
     Oscillator hw_osc_2;
     Oscillator hw_osc_noise;
+    
+    Filter hw_filter;
     
     maxiSettings settings;
     

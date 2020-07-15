@@ -121,9 +121,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     filter_SliderCutoff.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     filter_SliderCutoff.setColour(Slider::rotarySliderFillColourId, Colours::limegreen);
     filter_SliderCutoff.setColour(Slider::thumbColourId, Colours::green);
-    filter_SliderCutoff.setRange(20,8000,1);
-    filter_SliderCutoff.setValue(2000);
     filter_SliderCutoff.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
+    filter_SliderCutoff.setTextValueSuffix(" Hz");
     addAndMakeVisible(filter_SliderCutoff);
     
     filter_SliderCutoff_Label.setFont(15.f);
@@ -328,9 +327,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     delay_TimeSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     delay_TimeSlider.setColour(Slider::thumbColourId, Colours::purple);
     delay_TimeSlider.setColour(Slider::rotarySliderFillColourId, Colours::rebeccapurple);
-    delay_TimeSlider.setRange(0.0, 2000,0.01);
-    delay_TimeSlider.setValue(75);
     delay_TimeSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
+    delay_TimeSlider.setTextValueSuffix(" ms");
     addAndMakeVisible(delay_TimeSlider);
     
     delay_time_sliderAttachment = make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "DELAY_TIME", delay_TimeSlider);
@@ -346,8 +344,6 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
    delay_FeedbackSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
       delay_FeedbackSlider.setColour(Slider::thumbColourId, Colours::purple);
       delay_FeedbackSlider.setColour(Slider::rotarySliderFillColourId, Colours::rebeccapurple);
-      delay_FeedbackSlider.setRange(0.0, 2000,0.01);
-      delay_FeedbackSlider.setValue(75);
       delay_FeedbackSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
       addAndMakeVisible(delay_FeedbackSlider);
       
@@ -364,9 +360,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     delay_modulationSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         delay_modulationSlider.setColour(Slider::thumbColourId, Colours::purple);
         delay_modulationSlider.setColour(Slider::rotarySliderFillColourId, Colours::rebeccapurple);
-        delay_modulationSlider.setRange(0.0, 2000,0.01);
-        delay_modulationSlider.setValue(75);
         delay_modulationSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
+    delay_modulationSlider.setTextValueSuffix(" Hz");
         addAndMakeVisible(delay_modulationSlider);
         
         delay_modulation_sliderAttachment = make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "DELAY_MODULATION", delay_modulationSlider);

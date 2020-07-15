@@ -10,6 +10,8 @@
         <FILE id="o3xLz0" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
         <FILE id="fB7TBp" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
         <FILE id="Xq1ImJ" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
+        <FILE id="Veqi7U" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
+        <FILE id="A19vW9" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
         <FILE id="ZStMZL" name="Osc.cpp" compile="1" resource="0" file="Source/Osc.cpp"/>
         <FILE id="cXYJ0H" name="Osc.h" compile="0" resource="0" file="Source/Osc.h"/>
         <FILE id="XHSZMB" name="SynthParameterLimits.h" compile="0" resource="0"

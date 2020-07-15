@@ -11,6 +11,11 @@
 #pragma once
 
 
+/*
+ The purpose of this struct is to serve as a bridge between the AudioParameterValueTreeState object
+ in the processor, and the processing that takes places in the SynthVoice. 
+ */
+
 using floatType = double;
 
 struct SynthVoiceParameters
