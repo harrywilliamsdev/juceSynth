@@ -495,6 +495,7 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     
     filter_type_comboBox.addItem("LPF", 1);
     filter_type_comboBox.addItem("HPF", 2);
+    filter_type_comboBox.addItem("BPF", 3);
     addAndMakeVisible(filter_type_comboBox);
     
     filter_type_ComboBox_Attachment = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment>(processor.apvts,"FILTER_TYPE", filter_type_comboBox);

@@ -113,7 +113,7 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
                 
             //    double oscFilt = filter1.lores(oscEnv, filter_cutoff_target, parameters->filter_resonance);
                 
-                double oscFilt = hw_filter.process_sample(oscEnv, parameters->filter_cutoff, parameters->filter_resonance, 1);
+                double oscFilt = hw_filter.process_sample(oscEnv, parameters->filter_cutoff, parameters->filter_resonance, parameters->filter_type);
                 
                 double outputSample = oscFilt;
                 

@@ -69,17 +69,17 @@ struct SynthParameterLimits
         only two settings are available. 1 = Lowpass, 2 = Hipass
      
         The same biquad filter is used for each, but this parameter changes
-        the way
+        the way in which the coefficients are used, changing the profile of the filter.
      */
     const int filter_type_min {1};
-    const int filter_type_max {2};
+    const int filter_type_max {3};
     const int filter_type_default {1};
         // Cutoff
     const float filter_cutoff_min {20};
-    const float filter_cutoff_max {20000};
-    const float filter_cutoff_default {20000};
+    const float filter_cutoff_max {10000};
+    const float filter_cutoff_default {8000};
         // Resonance
-    const float filter_resonance_min {0.707};
+    const float filter_resonance_min {0.0};
     const float filter_resonance_max {10.0};
     const float filter_resonance_default {0.707};
         // Filter ENV Amount
