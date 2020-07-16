@@ -42,8 +42,8 @@ private:
     
     float delay = 450.f;
     
-    const int MAX_BUFFER_SIZE = 192600;
-    float delayBuffer[192600][2] = {0.0f};
+    const int MAX_BUFFER_SIZE = 88200;
+    float delayBuffer[88200][2] = {0.0f};
     int index[2] = {0};
     
     float speed = 5.0f; // Hz, frequency of LFO

@@ -32,6 +32,7 @@ bool SynthVoice::canPlaySound(SynthesiserSound *sound)
 void SynthVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSound *sound, int currentPitchWheelPosition)
 {
     env1.trigger = 1;
+    filter_envelope.trigger = 1;
     level = velocity;
      
     // Calculate frequency based on midi note number received
@@ -71,8 +72,12 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
             env1.setDecay(parameters->decay);
             env1.setSustain(parameters->sustain);
             env1.setRelease(parameters->release);
-            
-            
+    
+    filter_envelope.setAttack(parameters->attack);
+    filter_envelope.setDecay(parameters->decay);
+    filter_envelope.setSustain(parameters->sustain);
+    filter_envelope.setRelease(parameters->release);
+    
             for (int sample = 0; sample < numSamples; ++sample)
             {
                 
@@ -87,10 +92,6 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
                 double osc_signal = hw_osc_1.do_Oscillate(osc_1_frequency * osc_1_detune_amount, parameters->osc_1_wave); // add cents to pitch
                 double osc2_signal = hw_osc_2.do_Oscillate(osc_2_frequency * osc_2_detune_amount, parameters->osc_2_wave);
                 double oscNoise_signal = hw_osc_noise.do_Oscillate(frequency, 5);
-                
-                // Filter Noise
-                
-               oscNoise_signal = filter1.lores(oscNoise_signal, 1000, 1.1);
                 
                 
                 // MIXER SECTION
@@ -112,16 +113,16 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
     
                 
                 // runs knob value through an envelope ramp
-                float filter_env = (filter_cutoff_target / 4 ) + (env1.adsr(filter_cutoff_target, env1.trigger) * parameters->filter_envelope_amount);
+                float filter_env = (filter_cutoff_target / 4 ) + (filter_envelope.adsr(filter_cutoff_target, env1.trigger) * parameters->filter_envelope_amount);
                 
-                if (filter_env >= 20000)
+                if (filter_env >= 18000)
                 {
-                    filter_env = 20000;
+                    filter_env = 18000;
                 }
                 
-                if (filter_env <= 20)
+                if (filter_env <= 50)
                 {
-                    filter_env = 20;
+                    filter_env = 50;
                 }
                 
                 double oscFilt = hw_filter.process_sample(oscEnv, filter_env, parameters->filter_resonance, parameters->filter_type);

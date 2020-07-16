@@ -25,8 +25,8 @@ SynthTakeIiAudioProcessorEditor::SynthTakeIiAudioProcessorEditor (SynthTakeIiAud
     
     // TYPE SLIDER
     osc_1_SliderType.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    osc_1_SliderType.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
-    osc_1_SliderType.setColour(Slider::thumbColourId, hw_colour_6);
+    osc_1_SliderType.setColour(Slider::rotarySliderFillColourId, osc_rotaryFill_colour);
+    osc_1_SliderType.setColour(Slider::thumbColourId, osc_thumb_colour);
     osc_1_SliderType.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     addAndMakeVisible(osc_1_SliderType); // ADD TO EDITOR COMPONENT
     
@@ -40,8 +40,8 @@ SynthTakeIiAudioProcessorEditor::SynthTakeIiAudioProcessorEditor (SynthTakeIiAud
     addAndMakeVisible(osc_1_SliderType_Label);
     
     osc_1_SliderPitch.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    osc_1_SliderPitch.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
-    osc_1_SliderPitch.setColour(Slider::thumbColourId, hw_colour_6);
+    osc_1_SliderPitch.setColour(Slider::rotarySliderFillColourId, osc_rotaryFill_colour);
+    osc_1_SliderPitch.setColour(Slider::thumbColourId, osc_thumb_colour);
     osc_1_SliderPitch.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     osc_1_SliderPitch.setTextValueSuffix(" st");
     addAndMakeVisible(osc_1_SliderPitch);
@@ -55,8 +55,8 @@ SynthTakeIiAudioProcessorEditor::SynthTakeIiAudioProcessorEditor (SynthTakeIiAud
     addAndMakeVisible(osc_1_SliderPitch_Label);
     
 osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    osc_1_SliderDetune.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
-    osc_1_SliderDetune.setColour(Slider::thumbColourId, hw_colour_6);
+    osc_1_SliderDetune.setColour(Slider::rotarySliderFillColourId, osc_rotaryFill_colour);
+    osc_1_SliderDetune.setColour(Slider::thumbColourId, osc_thumb_colour);
     osc_1_SliderDetune.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     addAndMakeVisible(osc_1_SliderDetune);
     
@@ -71,8 +71,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
 // OSCILLATOR 2
     
       osc_2_SliderType.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-        osc_2_SliderType.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
-        osc_2_SliderType.setColour(Slider::thumbColourId, hw_colour_6);
+        osc_2_SliderType.setColour(Slider::rotarySliderFillColourId, osc_rotaryFill_colour);
+        osc_2_SliderType.setColour(Slider::thumbColourId, osc_thumb_colour);
         osc_2_SliderType.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
         addAndMakeVisible(osc_2_SliderType);
     
@@ -85,8 +85,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
         addAndMakeVisible(osc_2_SliderType_Label);
         
         osc_2_SliderPitch.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-        osc_2_SliderPitch.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
-        osc_2_SliderPitch.setColour(Slider::thumbColourId, hw_colour_6);
+        osc_2_SliderPitch.setColour(Slider::rotarySliderFillColourId, osc_rotaryFill_colour);
+        osc_2_SliderPitch.setColour(Slider::thumbColourId, osc_thumb_colour);
         osc_2_SliderPitch.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     osc_2_SliderPitch.setTextValueSuffix( " st");
         addAndMakeVisible(osc_2_SliderPitch);
@@ -100,8 +100,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
         addAndMakeVisible(osc_1_SliderPitch_Label);
         
     osc_2_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-        osc_2_SliderDetune.setColour(Slider::rotarySliderFillColourId, hw_colour_5);
-        osc_2_SliderDetune.setColour(Slider::thumbColourId, hw_colour_6);
+        osc_2_SliderDetune.setColour(Slider::rotarySliderFillColourId, osc_rotaryFill_colour);
+        osc_2_SliderDetune.setColour(Slider::thumbColourId, osc_thumb_colour);
         osc_2_SliderDetune.setRange(-50, 50, 0.5);
         osc_2_SliderDetune.setValue(0);
         osc_2_SliderDetune.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
@@ -140,13 +140,13 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
        filter_SliderResonance.setRange(0,1,0.01);
        filter_SliderResonance.setValue(0.2);
        filter_SliderResonance.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
-       addAndMakeVisible(filter_SliderResonance);
+       //addAndMakeVisible(filter_SliderResonance);
        
        filter_SliderResonance_Label.setFont(15.f);
        filter_SliderResonance_Label.setText("Resonance", NotificationType::dontSendNotification);
        filter_SliderResonance_Label.setJustificationType(Justification::centred);
        filter_SliderResonance_Label.attachToComponent(&filter_SliderResonance, false);
-       addAndMakeVisible(filter_SliderResonance_Label);
+      // addAndMakeVisible(filter_SliderResonance_Label);
     
     filter_resonance_sliderAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "FILTER_RESONANCE", filter_SliderResonance);
 
@@ -159,7 +159,7 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
           addAndMakeVisible(filter_SliderEG);
           
           filter_SliderEG_Label.setFont(15.f);
-          filter_SliderEG_Label.setText("EG Amount", NotificationType::dontSendNotification);
+          filter_SliderEG_Label.setText("Env Amt", NotificationType::dontSendNotification);
           filter_SliderEG_Label.setJustificationType(Justification::centred);
           filter_SliderEG_Label.attachToComponent(&filter_SliderEG, false);
           addAndMakeVisible(filter_SliderEG_Label);
@@ -169,8 +169,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
 // ADSR Sliders
     
     attackSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
-    attackSlider.setColour(Slider::trackColourId, hw_colour_1);
-    attackSlider.setColour(Slider::thumbColourId, hw_colour_4);
+    attackSlider.setColour(Slider::trackColourId, adsr_track_colour);
+    attackSlider.setColour(Slider::thumbColourId, adsr_thumb_colour);
     attackSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
     addAndMakeVisible(attackSlider);
     
@@ -183,8 +183,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     addAndMakeVisible(attackLabel);
     
     decaySlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
-    decaySlider.setColour(Slider::trackColourId, hw_colour_1);
-    decaySlider.setColour(Slider::thumbColourId, hw_colour_4);
+    decaySlider.setColour(Slider::trackColourId, adsr_track_colour);
+    decaySlider.setColour(Slider::thumbColourId, adsr_thumb_colour);
     decaySlider.setRange(0.0, 5.0, 1);
     decaySlider.setValue(1.0);
     decaySlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
@@ -199,8 +199,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     addAndMakeVisible(decayLabel);
     
     sustainSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
-    sustainSlider.setColour(Slider::trackColourId, hw_colour_1);
-    sustainSlider.setColour(Slider::thumbColourId, hw_colour_4);
+    sustainSlider.setColour(Slider::trackColourId, adsr_track_colour);
+    sustainSlider.setColour(Slider::thumbColourId, adsr_thumb_colour);
     sustainSlider.setRange(0.0, 1.0, 0.01);
     sustainSlider.setValue(0.8);
     sustainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
@@ -216,8 +216,8 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     
     
     releaseSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
-    releaseSlider.setColour(Slider::trackColourId, hw_colour_1);
-    releaseSlider.setColour(Slider::thumbColourId, hw_colour_4);
+    releaseSlider.setColour(Slider::trackColourId, adsr_track_colour);
+    releaseSlider.setColour(Slider::thumbColourId, adsr_thumb_colour);
     releaseSlider.setRange(0.0, 5.0, 1);
     releaseSlider.setValue(3.0);
     releaseSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
@@ -361,7 +361,6 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
         delay_modulationSlider.setColour(Slider::thumbColourId, Colours::purple);
         delay_modulationSlider.setColour(Slider::rotarySliderFillColourId, Colours::rebeccapurple);
         delay_modulationSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
-    delay_modulationSlider.setTextValueSuffix(" Hz");
         addAndMakeVisible(delay_modulationSlider);
         
         delay_modulation_sliderAttachment = make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.apvts, "DELAY_MODULATION", delay_modulationSlider);
@@ -500,6 +499,11 @@ osc_1_SliderDetune.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalD
     
     filter_type_ComboBox_Attachment = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment>(processor.apvts,"FILTER_TYPE", filter_type_comboBox);
     
+    filter_type_comboBox_Label.setFont(15.f);
+    filter_type_comboBox_Label.setText("Filter Type", dontSendNotification);
+    filter_type_comboBox_Label.setJustificationType(Justification::centred);
+    filter_type_comboBox_Label.attachToComponent(&filter_type_comboBox, false);
+    
     // COMBOX FOR LFO WAVE
     
     waveformComboBox.addItem("sin", 1);
@@ -535,10 +539,10 @@ SynthTakeIiAudioProcessorEditor::~SynthTakeIiAudioProcessorEditor()
 void SynthTakeIiAudioProcessorEditor::paint (Graphics& g)
 {
     // Set background colour overall
-    g.fillAll (Colours::black);
+    g.fillAll (background_fill_colour);
     
     // SECTION FRAME/BORDERS
-    g.setColour(Colours::gold);
+    g.setColour(frame_colour);
     g.drawRect(0, 0, 100, 400);
     g.drawRect(100, 0, 100, 400);
     g.drawRect(200, 0, 100, 400);
@@ -549,27 +553,27 @@ void SynthTakeIiAudioProcessorEditor::paint (Graphics& g)
     
 
     // OSC FILL
-    g.setColour(Colours::orangered);
+    g.setColour(osc_section_fill_colour);
     g.setOpacity(0.15);
     g.fillRect(0, 0, 100, 400);
     g.fillRect(100, 0, 100, 400);
     // FILTER FILL
-    g.setColour(Colours::lightgreen);
+    g.setColour(filter_section_fill_colour);
     g.setOpacity(0.15);
     g.fillRect(200, 0, 100, 400);
     // LFO FILL
-    g.setColour(Colours::blue);
+    g.setColour(lfo_section_fill_colour);
     g.setOpacity(0.15);
     g.fillRect(300, 240, 225, 160);
     // ENV FILL
-    g.setColour(Colours::purple);
+    g.setColour(envelope_section_fill_colour);
     g.setOpacity(0.15);
     g.fillRect(300, 0, 225, 240);
     // FX FILLS
-    g.setColour(Colours::brown);
+    g.setColour(distortion_section_fill_colour);
     g.setOpacity(0.1);
     g.fillRect(525, 0,275,120);
-    g.setColour(Colours::whitesmoke);
+    g.setColour(delay_section_fill_colour);
     g.setOpacity(0.1);
     g.fillRect(525,120,275,120);
         
@@ -618,10 +622,9 @@ void SynthTakeIiAudioProcessorEditor::resized()
     osc_2_SliderPitch.setBounds(110, 160, knobWidth, knobHeight);
     osc_2_SliderDetune.setBounds(110,290, knobWidth,knobHeight);
     // FILTER SECTION
-    filter_type_comboBox.setBounds(220, 265, comboBoxWidth + 10, comboBoxHeight);
-    filter_SliderEG.setBounds(210, 310, s_knobWidth, s_knobHeight);
     filter_SliderCutoff.setBounds(210, 30,knobWidth ,knobHeight);
-    filter_SliderResonance.setBounds(210, 160, knobWidth, knobHeight);
+    filter_SliderEG.setBounds(210, 165, knobWidth, knobHeight);
+    filter_type_comboBox.setBounds(215, 295, comboBoxWidth + 10, comboBoxHeight);
     // ENVELOPE SECTION
     attackSlider.setBounds(300,30,sliderWidth, sliderHeight);
     decaySlider.setBounds(350,30,sliderWidth, sliderHeight);

@@ -75,15 +75,15 @@ struct SynthParameterLimits
     const int filter_type_max {3};
     const int filter_type_default {1};
         // Cutoff
-    const float filter_cutoff_min {20};
-    const float filter_cutoff_max {10000};
+    const float filter_cutoff_min {50};
+    const float filter_cutoff_max {12000};
     const float filter_cutoff_default {8000};
         // Resonance
     const float filter_resonance_min {0.707};
     const float filter_resonance_max {0.7071};
     const float filter_resonance_default {0.707};
         // Filter ENV Amount
-    const float filter_envelope_amount_min {-1};
+    const float filter_envelope_amount_min {0};
     const float filter_envelope_amount_max {1};
     const float filter_envelope_amount_default {0.0};
     
@@ -92,20 +92,35 @@ struct SynthParameterLimits
      ADSR PARAM LIMITS
      */
         // ATTACK
+    /*
+     This parameter controls the time (in ms) it takes for the signal being passed through it to reach
+     maximum amplitude
+     */
     const float attack_min{0.01};
-    const float attack_max{3000};
+    const float attack_max{5000};
     const float attack_default{100};
         // DECAY
+    /*
+     This parameter controls the time (in ms) it takes for the signal to 'decay' from its maximum amplitude, to the level set in the sustain portion of the envelope
+     */
     const float decay_min{0.01};
-    const float decay_max{2000};
+    const float decay_max{3000};
     const float decay_default{50};
         // SUSTAIN
+    /*
+     The level at which the envelope 'sustains' while the key/trigger continues to be held down.
+     This is a volume based parameter, not time based
+     */
     const float sustain_min{0.01};
     const float sustain_max{0.99};
     const float sustain_default{0.8};
         // RELEASE
+    /*
+     This parameter controls the time in ms it takes for the envelope signal to
+     decay down from the sustain value to 0 amplitude after the key is released
+     */
     const float release_min{0.01};
-    const float release_max{4000};
+    const float release_max{5000};
     const float release_default{100};
     
     /*
@@ -163,9 +178,9 @@ struct SynthParameterLimits
     const float delay_groove_max {2.f};
     const float delay_groove_default {1.0};
     
-    const float delay_wetdry_min {0.0};
+    const float delay_wetdry_min {0};
     const float delay_wetdry_max {1.0};
-    const float delay_wetdry_default {0.0};
+    const float delay_wetdry_default {0};
     
     /*
      MIXER PARAMETER LIMITS

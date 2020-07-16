@@ -38,6 +38,7 @@ private:
     Slider filter_SliderCutoff, filter_SliderResonance, filter_SliderEG;
     Label filter_SliderType_Label, filter_SliderCutoff_Label, filter_SliderResonance_Label, filter_SliderEG_Label;
     ComboBox filter_type_comboBox;
+    Label filter_type_comboBox_Label;
     // LFO SLIDERS
     Slider lfo_SliderRate, lfo_SliderDepth;
     Label lfo_SliderRate_Label, lfo_SliderDepth_Label;
@@ -142,7 +143,6 @@ private:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> osc1_volume_sliderAttachment;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> osc2_volume_sliderAttachment;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> oscNoise_volume_sliderAttachment;
-    
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> osc_noise_volume_sliderAttachment;
     
     

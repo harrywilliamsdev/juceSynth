@@ -59,7 +59,7 @@ private:
     float osc_2_cents;
     
     maxiEnv env1;
-    maxiFilter filter1;
+    maxiEnv filter_envelope;
     
     Oscillator hw_osc_1;
     Oscillator hw_osc_2;

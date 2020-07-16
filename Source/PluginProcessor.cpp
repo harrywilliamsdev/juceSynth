@@ -217,7 +217,7 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             // Set feedback sample
             float distorted_feedback_sample = delay_repeats_distortion.processSample(output_of_delay, 1.0, 2);
             
-            delayFeedbackSample[channel] = delay_repeats_filter.process_sample(distorted_feedback_sample, 2500, 0.707, 1);
+            delayFeedbackSample[channel] = distorted_feedback_sample;
                 // DELAY WET DRY BLEND
             
             x = ((1.0 - delay_wetdry_balance) * x) + (delay_wetdry_balance * output_of_delay);
@@ -371,6 +371,7 @@ SynthTakeIiAudioProcessor::createParameters()
     
     parameters.push_back(std::make_unique<AudioParameterFloat>("OUTPUT", "Output", limits.output_volume_min, limits.output_volume_max, limits.output_volume_default));
     parameters.push_back(std::make_unique<AudioParameterFloat>("PAN", "Pan", limits.output_pan_min, limits.output_pan_max,limits.output_pan_default ));
+    
     
     return { parameters.begin(), parameters.end() };
 }
