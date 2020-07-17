@@ -11,6 +11,15 @@
 #include "SynthParameterLimits.h"
 #include "Filter.h"
 
+#if JUCE_WINDOWS
+    static const String directorySeparator = "\\";
+
+#elif JUCE_MAC
+    static const String directorySeparator = "/";
+#endif
+
+#define PRESET_FILE_EXTENSION ".synth"
+
 //==============================================================================
 /**
 */
@@ -85,9 +94,53 @@ public:
     
 
     
-    void debugParams();
-
+     void debugParams();
     
+    //Preset Management
+    //===========================
+    
+    /*
+        AudioProcessor
+            HarryAudioProcessorBase: preset management &c&c&c&c&c
+                HarrySynthAudioProcessor
+     */
+    
+    // GUIElement(*SynthTakeIiAUdioProcessor proc)
+    //      proc->storeLocalPreset
+    
+    
+    void getXmlForPreset (XmlElement* inElement);
+    void loadPresetForXML (XmlElement* inElement);
+    
+    int getNumberOfPresets();
+    
+    String getPresetName (int inPresetIndex);
+    
+    void initPresetManagement();
+    
+    void createNewPreset();
+    
+    void savePreset();
+    
+    void saveAsPreset (String inPresetName);
+    
+    void loadPreset (int inPresetIndex);
+    
+    bool getisCurrentPresetSaved();
+    
+    String getCurrentPresetName();
+    
+    int getCurrentPresetIndex();
+    
+    void populateLocalPresets();
+    bool currentPresetIsSaved;
+     
+    File currentlyLoadedPreset;
+    String presetDirectory;
+    XmlElement* currentPresetXml;
+    //===========================
+
+     
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthTakeIiAudioProcessor)
@@ -100,7 +153,11 @@ private:
         
     }
     
+    Array<File> localPresets;
+
+    
     
     
     
 };
+

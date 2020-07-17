@@ -88,7 +88,12 @@ private:
     Slider panSlider;
     Label panLabel;
     
-
+    // presetPanel
+    // constructor presetPanel(presetPanel (*processor))
+    // addAndmakeVisible
+    // resized() give it bounds
+    
+    
     /*
      
      SLIDER ATTACHMENTS SECTION

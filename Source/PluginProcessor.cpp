@@ -31,7 +31,7 @@ apvts(*this, nullptr, "Parameters", createParameters())
     
     hw_Synth.addSound(new SynthSound());
     
-    
+    initPresetManagement();
     
 }
 
@@ -186,18 +186,23 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     hw_Synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
     // Get params for on a block-by-block basis
+    // change these in update
     float distortion_wetdry_balance = *apvts.getRawParameterValue("DISTORTION_WETDRY");
     float delay_wetdry_balance = *apvts.getRawParameterValue("DELAY_WETDRY");
+    
     
     for (int channel = 0; channel < getTotalNumOutputChannels(); ++channel)
     {
         for (int i = 0; i < buffer.getNumSamples(); ++i)
         {
+            
          
             float x = buffer.getWritePointer(channel)[i];
             
             // Process Waveshaper
             float input_to_distortion = x;
+            
+            // change these in update
             float output_of_distortion = hw_Distortion.processSample(input_to_distortion, *apvts.getRawParameterValue("DISTORTION"), *apvts.getRawParameterValue("DISTORTION_TYPE"));
             
                 // DISTORTION WET DRY BLEND
@@ -250,12 +255,26 @@ void SynthTakeIiAudioProcessor::getStateInformation (MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+//    auto state = apvts.copyState();
+//    std::unique_ptr<XmlElement> xml (state.createXml());
+//    // parameter data APVTS
+//    // GUI size?
+//    // Preset Name?
+//    copyXmlToBinary (*xml, destData);
+    
 }
 
 void SynthTakeIiAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    
+//    std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+//
+//    if (xmlState.get() != nullptr)
+//        if (xmlState->hasTagName (apvts.state.getType()))
+//            apvts.replaceState (ValueTree::fromXml (*xmlState));
 }
 
 /*
@@ -383,3 +402,209 @@ SynthTakeIiAudioProcessor::createParameters()
     return { parameters.begin(), parameters.end() };
 }
 
+
+//===========================================================================================================================
+
+void SynthTakeIiAudioProcessor::initPresetManagement()
+{
+    // init current preset name to "Untitled"
+    const String pluginName = String ("SynthStuffInc");
+    
+    presetDirectory =
+    (File::getSpecialLocation (File::userDocumentsDirectory)).getFullPathName() + directorySeparator + pluginName;
+    
+    if(! File (presetDirectory).exists())
+        File (presetDirectory).createDirectory();
+    
+    // creates the internal list of available presets
+    populateLocalPresets();
+    
+}
+
+void SynthTakeIiAudioProcessor::populateLocalPresets()
+{
+    localPresets.clear();
+    
+    // DirectoryIterator deprecated JUCE 6.0
+    for(DirectoryIterator di (File (presetDirectory),
+                              false,
+                              "*"+(String)PRESET_FILE_EXTENSION,
+                              File::TypesOfFileToFind::findFiles); di.next();)
+    {
+        File preset = di.getFile();
+        localPresets.add(preset);
+    }
+    
+}
+
+int SynthTakeIiAudioProcessor::getNumberOfPresets()
+{
+    return localPresets.size();
+}
+
+String SynthTakeIiAudioProcessor::getPresetName(int inPresetIndex)
+{
+    // return the name of local preset without file extension
+    return "what";
+}
+
+void SynthTakeIiAudioProcessor::saveAsPreset(String inPresetName)
+{
+//    File presetFile = File(presetDirectory + directorySeparator + inPresetName + PRESET_FILE_EXTENSION);
+//
+//    //TODO: provide overwrite warning dialog and option to cancel
+//
+//    if(!presetFile.exists())
+//    {
+//        presetFile.create();
+//    }
+//    else
+//    {
+//        presetFile.deleteFile();
+//    }
+//
+//    MemoryBlock destinationData;
+//    processor->getStateInformation(destinationData);
+//
+//    presetFile.appendData(destinationData.getData(),
+//                          destinationData.getSize());
+//
+//    currentPresetIsSaved = true;
+//    currentPresetName = inPresetName;
+//
+//    // this occurs before the preset is stored. That's why .size() and not .size()-1
+//    currentPresetIndex = localPresets.size();
+//
+//    storeLocalPreset();
+    
+}
+
+void SynthTakeIiAudioProcessor::loadPreset(int inPresetIndex)
+{
+    // get the file associated with the index passed into the function
+//    currentlyLoadedPreset = localPresets[inPresetIndex];
+//    MemoryBlock presetBinary;
+//
+//    // if preset successfully loads, save its name and index
+//    // and also
+//    if(currentlyLoadedPreset.loadFileAsData(presetBinary))
+//    {
+//        currentPresetIsSaved = true;
+//        currentPresetName = getPresetName(inPresetIndex);
+//        currentPresetIndex = inPresetIndex;
+//        processor->setStateInformation(presetBinary.getData(),
+//                                        (int)presetBinary.getSize());
+//
+//
+//
+//    }
+//
+}
+
+//void VPresetManager::getXmlForPreset(XmlElement* inElement)
+//{
+//
+//    auto& parameters = processor->getParameters();
+//
+//    for(int i = 0; i< parameters.size(); i++)
+//    {
+//
+//        AudioProcessorParameterWithID* parameter =
+//        (AudioProcessorParameterWithID*)parameters.getUnchecked(i);
+//
+//        inElement->setAttribute (parameter->paramID, parameter->getValue());
+//    }
+//}
+//
+//void VPresetManager::loadPresetForXML(XmlElement* inElement)
+//{
+//    currentPresetXml = inElement;
+//
+//    auto& parameters = processor->getParameters();
+//
+//    for(int i = 0; i < currentPresetXml->getNumAttributes(); i++)
+//    {
+//
+//        const String paramId = currentPresetXml->getAttributeName(i);
+//        const float value = currentPresetXml->getDoubleAttribute(paramId);
+//
+//        for(int j = 0; j < parameters.size(); j++)
+//        {
+//            AudioProcessorParameterWithID* parameter =
+//            (AudioProcessorParameterWithID*)parameters.getUnchecked(i);
+//
+//            if(paramId == parameter->paramID)
+//            {
+//                parameter->setValueNotifyingHost(value);
+//            }
+//        }
+//    }
+//}
+
+
+
+
+
+/*
+    INF, NaN?
+    jassert (output < 50.0); +100 dB;
+    jassert (isANumber())
+ */
+
+    
+// proc.currentPresetName
+
+/*
+    if localPresets is public
+ 
+    for (const auto& preset : proc.localPresets)
+    {
+        combobox->additem (preset.getFileNameWithoutExtension())
+    }
+ */
+
+/*
+ GUI construction
+ 
+    preset GUI
+    update box
+        add items
+            iterating through File array of localPresets
+        setTest (presetName)
+ 
+ GUI has buttons: save saveAs new
+ 
+ Combobox
+ 
+ class VPresetPanel  :   public VPanelBase,
+                         public Button::Listener,
+                         public ComboBox::Listener
+ 
+ Create buttons, register your panel as a listener
+        myButton.addListener (this);
+ 
+ juce::button saveAs;
+ 
+ // in contructor
+ myButton.addListener (this);
+ 
+ YourPanel::buttonClicked (Button* b)
+ {
+     if (b == saveAs)
+     {
+        DBG ("saveAs Clicked")
+     }
+}
+ 
+ YourPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+ {
+    // check to see if the combo box that has been changed for preset selection
+ 
+    // getSelectedItemIndex
+ 
+    // loadPreset ()
+ 
+ }
+
+ 
+ */
