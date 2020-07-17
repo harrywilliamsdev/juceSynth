@@ -10,6 +10,8 @@
         <FILE id="o3xLz0" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
         <FILE id="fB7TBp" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
         <FILE id="Xq1ImJ" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
+        <FILE id="sUK91U" name="Env.cpp" compile="1" resource="0" file="Source/Env.cpp"/>
+        <FILE id="N7g8fZ" name="Env.h" compile="0" resource="0" file="Source/Env.h"/>
         <FILE id="Veqi7U" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
         <FILE id="A19vW9" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
         <FILE id="MNdVjO" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
@@ -22,30 +24,6 @@
               file="Source/SynthVoiceParams.h"/>
         <FILE id="EYOGbQ" name="UtilityFunctions.h" compile="0" resource="0"
               file="Source/UtilityFunctions.h"/>
-      </GROUP>
-      <GROUP id="{746F0ADD-03B1-1949-7590-2B3509967A8F}" name="Maximilian">
-        <GROUP id="{68228D5D-CAFD-9AA0-023C-263757F634DC}" name="libs">
-          <FILE id="i69Ejw" name="fft.cpp" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/libs/fft.cpp"/>
-          <FILE id="utorCQ" name="fft.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/fft.h"/>
-          <FILE id="nj58VX" name="maxiAtoms.cpp" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiAtoms.cpp"/>
-          <FILE id="x2xokH" name="maxiAtoms.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiAtoms.h"/>
-          <FILE id="VRthtZ" name="maxiBark.cpp" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiBark.cpp"/>
-          <FILE id="vySTPZ" name="maxiBark.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiBark.h"/>
-          <FILE id="p2OUBN" name="maxiFFT.cpp" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiFFT.cpp"/>
-          <FILE id="RJSAr8" name="maxiFFT.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiFFT.h"/>
-          <FILE id="xJ9AHt" name="maxiGrains.cpp" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiGrains.cpp"/>
-          <FILE id="tRJBvP" name="maxiGrains.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiGrains.h"/>
-          <FILE id="WXv0qR" name="maxim.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxim.h"/>
-          <FILE id="nl8rwF" name="maxiMFCC.cpp" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiMFCC.cpp"/>
-          <FILE id="GDxoIl" name="maxiMFCC.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiMFCC.h"/>
-          <FILE id="BW5qwV" name="maxiReverb.cpp" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiReverb.cpp"/>
-          <FILE id="iFoewx" name="maxiReverb.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/maxiReverb.h"/>
-          <FILE id="XskVv3" name="sineTable.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/sineTable.h"/>
-          <FILE id="eFUAji" name="stb_vorbis.c" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/libs/stb_vorbis.c"/>
-          <FILE id="FG6HO3" name="stb_vorbis.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/libs/stb_vorbis.h"/>
-        </GROUP>
-        <FILE id="ru0Bov" name="maximilian.cpp" compile="1" resource="0" file="../../../Maximilian-master/Maximilian/maximilian.cpp"/>
-        <FILE id="ytTKIe" name="maximilian.h" compile="0" resource="0" file="../../../Maximilian-master/Maximilian/maximilian.h"/>
       </GROUP>
       <FILE id="VSCxio" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
       <FILE id="hLEVGX" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
