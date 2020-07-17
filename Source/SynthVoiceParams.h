@@ -42,8 +42,8 @@ struct SynthVoiceParameters
     // LFO
     int lfo_type {1};
     float lfo_rate {2};
-    float lfo_pitch_depth {0.002};
-    float lfo_filter_depth {0.002};
+    float lfo_pitch_depth {0};
+    float lfo_filter_depth {0};
     
     // Mixer
     float osc1_volume { 1 };

@@ -113,9 +113,13 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
                 float lfo_signal = hw_lfo.do_Oscillate(parameters->lfo_rate, parameters->lfo_type);
                 float lfo_pitch_amount = lfo_signal * parameters->lfo_pitch_depth;
                 
+                
+//                + frequency_semitone_increase(frequency, lfo_pitch_amount)
+//                + frequency_semitone_increase(frequency, lfo_pitch_amount)
+                
                 // GENERATE SIGNALS
-                double osc_signal = hw_osc_1.do_Oscillate((osc_1_frequency * osc_1_detune_amount) + lfo_pitch_amount , parameters->osc_1_wave);
-                double osc2_signal = hw_osc_2.do_Oscillate((osc_2_frequency * osc_2_detune_amount) + lfo_pitch_amount, parameters->osc_2_wave);
+                double osc_signal = hw_osc_1.do_Oscillate((osc_1_frequency * osc_1_detune_amount)  , parameters->osc_1_wave);
+                double osc2_signal = hw_osc_2.do_Oscillate((osc_2_frequency * osc_2_detune_amount) + frequency_semitone_increase(osc_2_frequency, lfo_pitch_amount), parameters->osc_2_wave);
                 double oscNoise_signal = hw_osc_noise.do_Oscillate(frequency, 5);
                 
                 

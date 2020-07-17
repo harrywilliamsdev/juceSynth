@@ -34,7 +34,7 @@ public:
     float a2 {0.f};
     
     float frequency {8000};
-    const float Q = 0.5;
+    const float Q = 0.99;
     
     float sampleRate {44100};
     

@@ -135,8 +135,8 @@ struct SynthParameterLimits
 
     // DEPTH
     const float lfo_depth_min {0.0f};
-    const float lfo_depth_max {100.f};
-    const float lfo_depth_default {1.f};
+    const float lfo_depth_max {50.f};
+    const float lfo_depth_default {0.f};
     // LFO WAVE
     const int lfo_wave_min {1};
     const int lfo_wave_max {3};

@@ -63,7 +63,7 @@ float LFO::generate_square(float rate)
    // calculate output
    if (phase < 0.5)
    {
-       output = -1.0;
+       output = 0.0;
    }
    else
    {

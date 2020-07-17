@@ -79,6 +79,10 @@ public:
     AudioProcessorValueTreeState apvts;
     AudioProcessorValueTreeState::ParameterLayout createParameters();
     
+    // Variables used in PluginProcessor process block
+    // Declared here so can be updated in update()
+    float distortion_wetdry_balance;
+    float delay_wetdry_balance;
     
     
     SynthVoiceParameters params;

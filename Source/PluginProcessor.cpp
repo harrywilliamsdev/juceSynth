@@ -185,7 +185,6 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     // generate the next synth block
     hw_Synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
-    // Get params for on a block-by-block basis
     float distortion_wetdry_balance = *apvts.getRawParameterValue("DISTORTION_WETDRY");
     float delay_wetdry_balance = *apvts.getRawParameterValue("DELAY_WETDRY");
     

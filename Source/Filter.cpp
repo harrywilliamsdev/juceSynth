@@ -48,6 +48,8 @@ float Filter::process_sample(float x, float cutoff, float resonance, int type)
             // HPF Calculation
         case 2:
         {
+            // Q =
+            
             a0 = 1.f + alpha;
             b0 = 1 + cos_w0 / 2;
             b1 = -(1 + cos_w0);
