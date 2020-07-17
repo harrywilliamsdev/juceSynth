@@ -19,7 +19,11 @@
 class Envelope {
     
 public:
+    
+    
     double adsr(double input, int trigger=0);
+    
+    //////////
     double input;
     double output;
     double attack;
@@ -27,6 +31,7 @@ public:
     double sustain;
     double release;
     double amplitude;
+    ////////
     float sampleRate { 44100 };
 
     void setAttack(double attackMS);
