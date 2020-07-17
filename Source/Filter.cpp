@@ -54,6 +54,7 @@ float Filter::process_sample(float x, float cutoff, float resonance, int type)
             b2 = 1 + cos_w0 / 2;
             a1 = -2 * cos_w0;
             a2 = 1.f - alpha;
+            break;
         }
             // BPF/Peaking Calculation
         case 3:
@@ -64,8 +65,9 @@ float Filter::process_sample(float x, float cutoff, float resonance, int type)
             b2 = -alpha;
             a1 = -2 * cos_w0;
             a2 = 1 - alpha;
+            break;
         }
-            
+            // NOTCH FILTER
         case 4:
         {
             a0 = 1.f + alpha;
@@ -74,6 +76,7 @@ float Filter::process_sample(float x, float cutoff, float resonance, int type)
             b2 = 1;
             a1 = -2 * cos_w0;
             a2 = 1 - alpha;
+            break;
         }
     }
     

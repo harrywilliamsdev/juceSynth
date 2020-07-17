@@ -163,11 +163,11 @@ struct SynthParameterLimits
      */
     
     const float delay_time_min {0};
-    const float delay_time_max {1500};
+    const float delay_time_max {1000};
     const float delay_time_default {200};
     
     const float delay_feedback_min {0.f};
-    const float delay_feedback_max {2.f};
+    const float delay_feedback_max {0.65f};
     const float delay_feedback_default {0.33};
     
     const float delay_modulation_min {0.01f};

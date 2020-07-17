@@ -12,6 +12,8 @@
         <FILE id="Xq1ImJ" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
         <FILE id="Veqi7U" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
         <FILE id="A19vW9" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
+        <FILE id="MNdVjO" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
+        <FILE id="UNBd8C" name="LFO.h" compile="0" resource="0" file="Source/LFO.h"/>
         <FILE id="ZStMZL" name="Osc.cpp" compile="1" resource="0" file="Source/Osc.cpp"/>
         <FILE id="cXYJ0H" name="Osc.h" compile="0" resource="0" file="Source/Osc.h"/>
         <FILE id="XHSZMB" name="SynthParameterLimits.h" compile="0" resource="0"

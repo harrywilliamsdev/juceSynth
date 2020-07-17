@@ -31,4 +31,8 @@ public:
     float generate_sinewave(float rate);
     float generate_triangle(float rate);
     float generate_square(float rate);
+    
+    void setPhase(float phaseIn) { this->phase = phaseIn; }
+    
+    
 };

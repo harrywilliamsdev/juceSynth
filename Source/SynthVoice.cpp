@@ -22,9 +22,10 @@ void SynthVoice::setCurrentPlaybackSampleRate(const double newRate)
      *The hosts sample rate is used in a number of the equations,
      including the oscillators increment calculation and the biquad calculations
      */
-    settings.setSampleRate(newRate);
     hw_filter.sampleRate = newRate;
     SynthesiserVoice::setCurrentPlaybackSampleRate(newRate);
+    hw_envelope.sampleRate = newRate;
+    hw_filter_envelope.sampleRate = newRate; 
 }
 
 bool SynthVoice::canPlaySound(SynthesiserSound *sound)
@@ -39,8 +40,8 @@ bool SynthVoice::canPlaySound(SynthesiserSound *sound)
 void SynthVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSound *sound, int currentPitchWheelPosition)
 {
     // Set the envelope trigger flags
-    env1.trigger = 1;
-    filter_envelope.trigger = 1;
+    hw_envelope.trigger = 1;
+    hw_filter_envelope.trigger = 1;
     level = velocity;
      
     // Calculate frequency based on midi note number received
@@ -54,7 +55,7 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSound 
 
 void SynthVoice::stopNote(float velocity, bool allowtailOff)
 {
-    env1.trigger = 0;
+    hw_envelope.trigger = 0;
     allowtailOff = true;
     
     
@@ -62,6 +63,10 @@ void SynthVoice::stopNote(float velocity, bool allowtailOff)
     {
         clearCurrentNote();
     }
+    
+    
+    hw_lfo.setPhase(0);
+    
 }
 
 void SynthVoice::pitchWheelMoved(int newPitchWheelValue)
@@ -85,15 +90,15 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
             times per second. With a block size of 512, these updates would only occur
             86 times per second
          */
-            env1.setAttack(parameters->attack);
-            env1.setDecay(parameters->decay);
-            env1.setSustain(parameters->sustain);
-            env1.setRelease(parameters->release);
+            hw_envelope.setAttack(parameters->attack);
+            hw_envelope.setDecay(parameters->decay);
+            hw_envelope.setSustain(parameters->sustain);
+            hw_envelope.setRelease(parameters->release);
     
-            filter_envelope.setAttack(parameters->attack);
-            filter_envelope.setDecay(parameters->decay);
-            filter_envelope.setSustain(parameters->sustain);
-            filter_envelope.setRelease(parameters->release);
+            hw_filter_envelope.setAttack(parameters->attack);
+            hw_filter_envelope.setDecay(parameters->decay);
+            hw_filter_envelope.setSustain(parameters->sustain);
+            hw_filter_envelope.setRelease(parameters->release);
     
             for (int sample = 0; sample < numSamples; ++sample)
             {
@@ -124,14 +129,14 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
                 
                 
             // APPLY VOLUME ENVELOPE TO THE SIGNALS
-                double oscEnv = env1.adsr(oscMixed, env1.trigger) * level;
+                double oscEnv = hw_envelope.adsr(oscMixed, hw_envelope.trigger) * level;
             // FILTER PREPROCESSING
                 // Cutoff knob value from gui
                 float filter_cutoff_target = parameters->filter_cutoff;
     
                 
                 // runs cutoff knob value through an envelope ramp
-                float filter_env = (filter_cutoff_target / 4 ) + (filter_envelope.adsr(filter_cutoff_target, env1.trigger) * parameters->filter_envelope_amount);
+                float filter_env = (filter_cutoff_target / 4 ) + (hw_filter_envelope.adsr(filter_cutoff_target, hw_envelope.trigger) * parameters->filter_envelope_amount);
                 
                 // limit the range of the filter
                 if (filter_env >= 18000)

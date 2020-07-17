@@ -12,12 +12,12 @@
 #include <JuceHeader.h>
 #include "SynthSound.h"
 #include "CustomColours.h"
-#include "Maximilian.h"
 #include "Osc.h"
 #include "UtilityFunctions.h"
 #include "SynthVoiceParams.h"
 #include "Filter.h"
 #include "LFO.h"
+#include "Env.h"
 
 /*
  
@@ -59,8 +59,8 @@ private:
     float osc_1_cents;
     float osc_2_cents;
     
-    maxiEnv env1;
-    maxiEnv filter_envelope;
+    Envelope hw_envelope;
+    Envelope hw_filter_envelope;
     
     Oscillator hw_osc_1;
     Oscillator hw_osc_2;
@@ -70,8 +70,6 @@ private:
     
     Filter hw_filter;
     Filter hw_noise_filter;
-    
-    maxiSettings settings;
     
     SynthVoiceParameters* parameters;
   
