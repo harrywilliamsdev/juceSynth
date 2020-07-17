@@ -65,6 +65,16 @@ float Filter::process_sample(float x, float cutoff, float resonance, int type)
             a1 = -2 * cos_w0;
             a2 = 1 - alpha;
         }
+            
+        case 4:
+        {
+            a0 = 1.f + alpha;
+            b0 = 1;
+            b1 = -2 * cos_w0;
+            b2 = 1;
+            a1 = -2 * cos_w0;
+            a2 = 1 - alpha;
+        }
     }
     
     // DIVIDE ALL THROUGH A0

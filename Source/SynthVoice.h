@@ -17,6 +17,7 @@
 #include "UtilityFunctions.h"
 #include "SynthVoiceParams.h"
 #include "Filter.h"
+#include "LFO.h"
 
 /*
  
@@ -64,6 +65,8 @@ private:
     Oscillator hw_osc_1;
     Oscillator hw_osc_2;
     Oscillator hw_osc_noise;
+    
+    LFO hw_lfo;
     
     Filter hw_filter;
     Filter hw_noise_filter;

@@ -294,6 +294,13 @@ void SynthTakeIiAudioProcessor::update()
     params.filter_resonance = apvts.getRawParameterValue("FILTER_RESONANCE")->load(); // IMPLEMENTED
     params.filter_envelope_amount = apvts.getRawParameterValue("FILTER_EG_AMOUNT")->load(); // IMPLEMENTED
     
+    // LFO SECTION
+    
+    params.lfo_rate = apvts.getRawParameterValue("RATE")->load();
+    params.lfo_type = apvts.getRawParameterValue("LFO_WAVE")->load();
+    params.lfo_filter_depth = apvts.getRawParameterValue("DEPTH")->load();
+    params.lfo_pitch_depth = apvts.getRawParameterValue("DEPTH")->load();
+    
     // MIXER SECTION
         
     params.osc1_volume = apvts.getRawParameterValue("OSC1_VOLUME")->load(); // IMPLEMENTED

@@ -19,7 +19,7 @@ Oscillator::Oscillator()
 
 double Oscillator::generate_sinewave(double frequency)
 {
-    increment = (1 / (m_sample_rate / frequency));
+    increment = (1 / (sample_rate / frequency));
     // Wrap around the modulo counter
     if (phase >= 1.0)
     {
@@ -33,7 +33,7 @@ double Oscillator::generate_sinewave(double frequency)
 double Oscillator::generate_triangle(double frequency)
 {
     // Calculate Phase Inc
-    increment = (1 / (m_sample_rate / frequency));
+    increment = (1 / (sample_rate / frequency));
     // Modulo wrap
     if (phase >= 1.0) phase -= 1.0;
     
@@ -55,7 +55,7 @@ double Oscillator::generate_triangle(double frequency)
 double Oscillator::generate_saw(double frequency)
 {
     // Calculate phase inc
-    increment = (1 / (m_sample_rate / frequency));
+    increment = (1 / (sample_rate / frequency));
     
     if (phase >= 1.0)
     {
@@ -69,7 +69,7 @@ double Oscillator::generate_saw(double frequency)
 
 double Oscillator::generate_square(double frequency)
 {
-    increment = (1 / (m_sample_rate / frequency));
+    increment = (1 / (sample_rate / frequency));
     // check modulo wrap
     if (phase >= 1.0)
     {

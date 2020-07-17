@@ -21,7 +21,7 @@ class Oscillator
     double phase {0};
     double increment{0};
     double output{0};
-    double m_sample_rate { 44100 };
+    double sample_rate { 44100 };
     
     
 public:
@@ -32,10 +32,4 @@ public:
     double generate_saw(double frequency);
     double generate_square(double frequency);
     double generate_noise();
-    
-    // HELPERS
-    
-    double calculate_increment(double frequency, double sampleRate);
-    void check_modulo();
-    
 };
