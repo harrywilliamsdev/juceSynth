@@ -223,7 +223,7 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             
             
             // Process Gain - INCLUDE PAN HERE
-            x *= * apvts.getRawParameterValue("OUTPUT");
+            x *= output_gain;
         
             // Write to buffer
             float y = x; // Set output samples
@@ -304,7 +304,13 @@ void SynthTakeIiAudioProcessor::update()
         
     params.osc1_volume = apvts.getRawParameterValue("OSC1_VOLUME")->load(); // IMPLEMENTED
     params.osc2_volume = apvts.getRawParameterValue("OSC2_VOLUME")->load(); // IMPLEMENTED
-    params.osc_noise_volume = apvts.getRawParameterValue("OSCNOISE_VOLUME")->load(); // IMPLEMENTED 
+    params.osc_noise_volume = apvts.getRawParameterValue("OSCNOISE_VOLUME")->load(); // IMPLEMENTED
+    
+    
+    //=========================================================================
+        // PLUGIN PROCESSOR PARAMS, DONT NEED TO BE PASSED TO PARAMS STRUCT
+    
+    output_gain = apvts.getRawParameterValue("OUTPUT")->load();
     
 }
 

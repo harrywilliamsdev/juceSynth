@@ -59,6 +59,7 @@ public:
 
     
     SynthParameterLimits limits;
+    SynthVoiceParameters params;
     
     Synthesiser hw_Synth;
     SynthVoice* hw_Voice;
@@ -68,7 +69,7 @@ public:
     
     Filter delay_repeats_filter;
     
-    float delayFeedbackSample[2]; 
+    float delayFeedbackSample[2];
     
     
     
@@ -84,8 +85,9 @@ public:
     float distortion_wetdry_balance;
     float delay_wetdry_balance;
     
+    float output_gain {limits.output_volume_default };
     
-    SynthVoiceParameters params;
+    
     
 
     
