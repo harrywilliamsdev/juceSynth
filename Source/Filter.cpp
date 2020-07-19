@@ -21,7 +21,7 @@ Filter::~Filter()
     
 }
 
-float Filter::process_sample(float x, float cutoff, float resonance, int type)
+float Filter::process_sample(float x, float cutoff, int type)
 {
     
     // frequency to w0

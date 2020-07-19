@@ -3,6 +3,24 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
+/*
+ 
+ TO DO:
+ 
+ 
+ Initial update for parameter values - due to your on slider value changed thing
+ 
+ stick it into prepare to play
+ 
+ call it initParams();
+ 
+ */
+
+
+
+
+
 //==============================================================================
 SynthTakeIiAudioProcessor::SynthTakeIiAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -181,6 +199,9 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     // update parameters in the synth voice
     if (mustUpdateProcessing)
         update();
+    
+    debugParams();
+    // PRINTS THE CURRENT VALUE OF ALL PARAMS TO DEBUG WINDOW
     
     // generate the next synth block
     hw_Synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());

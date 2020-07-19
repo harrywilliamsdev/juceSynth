@@ -17,7 +17,7 @@ public:
     Filter();
     ~Filter();
     
-    float process_sample(float input, float cutoff, float resonance, int type);
+    float process_sample(float x, float cutoff, int type);
     void calculate_biquad_coefficients();
     
     float x1;
@@ -34,7 +34,7 @@ public:
     float a2 {0.f};
     
     float frequency {8000};
-    const float Q = 0.99;
+    const float Q = 0.70710678;
     
     float sampleRate {44100};
     

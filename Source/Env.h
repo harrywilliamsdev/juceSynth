@@ -9,6 +9,7 @@
 */
 
 #pragma once
+#include <JuceHeader.h>
 
 
 /*
@@ -35,6 +36,13 @@ public:
     void setSustain(double sustainL);
     int trigger;
 
+    
+    
+    const float attack_TCO {0.99999};
+    const float decay_TCO {static_cast<float>(std::exp(-11.05))};
+    const float release_TCO {decay_TCO};
+    
+    
     long holdtime=1;
     long holdcount;
     int attackphase,decayphase,sustainphase,holdphase,releasephase;

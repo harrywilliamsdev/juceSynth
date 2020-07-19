@@ -154,7 +154,7 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
                 }
                 
                 // filter the sound
-                double oscFilt = hw_filter.process_sample(oscEnv, filter_env, parameters->filter_resonance, parameters->filter_type);
+                double oscFilt = hw_filter.process_sample(oscEnv, filter_env,  parameters->filter_type);
                 
                 // set the output sample
                 double outputSample = oscFilt;
