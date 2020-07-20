@@ -33,6 +33,9 @@ public:
     float a1 {0.f};
     float a2 {0.f};
     
+    float last_cutoff {0};
+    bool should_recalculate_coefficients {true};
+    
     float frequency {8000};
     const float Q = 0.70710678;
     

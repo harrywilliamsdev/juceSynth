@@ -196,8 +196,8 @@ struct SynthParameterLimits
     const float output_volume_default {0.75};
     
     const float output_pan_min {0};
-    const float output_pan_max {1};
-    const float output_pan_default {0.5};
+    const float output_pan_max {90};
+    const float output_pan_default {45};
     
     
     

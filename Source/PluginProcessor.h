@@ -57,40 +57,64 @@ public:
     
     void update();
 
-    
+    // Parameters
     SynthParameterLimits limits;
     SynthVoiceParameters params;
-    
+    // Synth object and pointer to voice
     Synthesiser hw_Synth;
     SynthVoice* hw_Voice;
-    
+    // Delay Objects
     Delay delay;
     Distortion delay_repeats_distortion;
-    
     Filter delay_repeats_filter;
     
-    float delayFeedbackSample[2];
+    float delayFeedbackSample[2] {0};
+    float delay_wetdry_balance {0};
+    float delay_groove {0};
+    float delay_feedback {0};
+    float delay_time {0};
+    float delay_modulation {0};
     
     
-    
+    // Distortion
     Distortion hw_Distortion;
+    float distortion_wetdry_balance {0};
+    float distortion_amount {0};
+    int distortion_type {0}; 
     
-    double lastSampleRate;
+    
+    
+    
+    
+    // Pan params
+    float left_pan {0};
+    float right_pan {0};
+    // Master output volume
+    float output_gain {0};
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    double lastSampleRate {0};
     
     AudioProcessorValueTreeState apvts;
     AudioProcessorValueTreeState::ParameterLayout createParameters();
     
     // Variables used in PluginProcessor process block
     // Declared here so can be updated in update()
-    float distortion_wetdry_balance;
-    float delay_wetdry_balance;
+    // Initialise using limits so params are correct from opening
     
-    float output_gain {limits.output_volume_default };
+    
     
     
     
 
-    
+    // Helper function, prints out the values in the APVTS
     void debugParams();
 
     
@@ -103,6 +127,7 @@ private:
     void valueTreePropertyChanged(ValueTree& tree, const Identifier& property) override
     {
         mustUpdateProcessing = true;
+        debugParams();
         
     }
     

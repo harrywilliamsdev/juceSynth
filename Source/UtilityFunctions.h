@@ -59,10 +59,6 @@ inline float concave_inverted_transform(float input)
 
 
 
-
-
-
-
 inline float linear_interp(float v0, float v1, float t)
 {
     return (1 - t) * v0 + t  * v1;
@@ -78,4 +74,10 @@ inline int signum(float x)
     {
         return -1;
     }
+}
+
+inline float convert_degrees_to_radians (float degrees)
+{
+    float radians = degrees * PI / 180;
+    return radians;
 }

@@ -583,19 +583,6 @@ void SynthTakeIiAudioProcessorEditor::paint (Graphics& g)
 void SynthTakeIiAudioProcessorEditor::resized()
 {
     
-    /*
-            LAYOUT SECTION
-        TO DO:
-        GET RID OF MAGIC NUMBERS - SET A FEW DIFFERENT SIZE VARIABLES
-     
-        SLIDER HEIGHT
-        SLIDER WIDTH
-        KNOB HEIGHT
-        KNOB WIDTH
-     
-        Then use the master height and width to dynamically arrange your components
-     */
-    
     // SLIDER DIMENSION DECLARTIONS
     
     // VERTICAL SLIDER

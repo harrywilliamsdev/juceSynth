@@ -16,15 +16,14 @@
  in the PluginProcessor, and the processing that takes places in the SynthVoice.
  */
 
-using floatType = double;
 
 struct SynthVoiceParameters
 {
     // Envelope
-    floatType attack { 100.f };
-    floatType decay  { 50.f };
-    floatType sustain { 0.8f };
-    floatType release { 500.f };
+    float attack { 100.f };
+    float decay  { 50.f };
+    float sustain { 0.8f };
+    float release { 500.f };
     // Oscillator 1
     int osc_1_wave { 2 };
     int osc_1_pitch { 0 };

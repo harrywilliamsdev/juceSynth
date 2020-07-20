@@ -3,24 +3,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-
-/*
- 
- TO DO:
- 
- 
- Initial update for parameter values - due to your on slider value changed thing
- 
- stick it into prepare to play
- 
- call it initParams();
- 
- */
-
-
-
-
-
 //==============================================================================
 SynthTakeIiAudioProcessor::SynthTakeIiAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -48,6 +30,8 @@ apvts(*this, nullptr, "Parameters", createParameters())
     hw_Synth.clearSounds();
     
     hw_Synth.addSound(new SynthSound());
+    
+    update();
     
     
     
@@ -124,6 +108,7 @@ void SynthTakeIiAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    update();
     ignoreUnused(samplesPerBlock);
     lastSampleRate = sampleRate;
     hw_Synth.setCurrentPlaybackSampleRate(lastSampleRate);
@@ -161,53 +146,25 @@ bool SynthTakeIiAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
 }
 #endif
 
-void SynthTakeIiAudioProcessor::debugParams() {
-    DBG("Attack: " << *apvts.getRawParameterValue("ATTACK"));
-    DBG("Decay: " << *apvts.getRawParameterValue("DECAY"));
-    DBG("Sustain: " << *apvts.getRawParameterValue("SUSTAIN"));
-    DBG("Release: " << *apvts.getRawParameterValue("RELEASE"));
-    //LFO
-    DBG("Rate: " << *apvts.getRawParameterValue("RATE"));
-    DBG("Depth: " << *apvts.getRawParameterValue("DEPTH"));
-    DBG("LFO WAVE: " << *apvts.getRawParameterValue("LFO_WAVE"));
-    // OSC 1
-    DBG("Osc 1 TYPE: " << *apvts.getRawParameterValue("OSC1_WAVE"));
-    DBG("Osc 1 Pitch Semitones: " << *apvts.getRawParameterValue("OSC1_PITCH"));
-    DBG("Osc 1 Detune Cents: " << * apvts.getRawParameterValue("OSC1_DETUNE"));
-    // OSCsc
-    DBG("Osc 2 TYPE: " << *apvts.getRawParameterValue("OSC2_WAVE"));
-    DBG("Osc 2 Pitch Semitones: " << *apvts.getRawParameterValue("OSC2_PITCH"));
-    DBG("Osc 2 Detune Cents: " << * apvts.getRawParameterValue("OSC2_DETUNE"));
-    // FILTER
-    DBG("Filter Type: " << *apvts.getRawParameterValue("FILTER_TYPE"));
-    DBG("Filter Cutoff: " << *apvts.getRawParameterValue("FILTER_CUTOFF"));
-    DBG("Filter Resonance: " << *apvts.getRawParameterValue("FILTER_RESONANCE"));
-    // FX
-    DBG("DIST: " << *apvts.getRawParameterValue("DISTORTION"));
-    // OUTPUT
-    DBG("PAN: " << *apvts.getRawParameterValue("PAN"));
-    DBG("OP: " << *apvts.getRawParameterValue("OUTPUT"));
-}
 
 void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     
     // Clear any leftovers in the buffer
-    buffer.clear();
-    
+    // clear buffer to avoid noise in case you are not filling them (all)
+    for (int i = getTotalNumInputChannels(); i < getTotalNumOutputChannels(); ++i)
+        buffer.clear (i, 0, buffer.getNumSamples());
 
     // update parameters in the synth voice
-    if (mustUpdateProcessing)
+    if (mustUpdateProcessing) // flag set by valueTreeProperyChanged
         update();
     
-    debugParams();
-    // PRINTS THE CURRENT VALUE OF ALL PARAMS TO DEBUG WINDOW
     
     // generate the next synth block
     hw_Synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
-    float distortion_wetdry_balance = *apvts.getRawParameterValue("DISTORTION_WETDRY");
-    float delay_wetdry_balance = *apvts.getRawParameterValue("DELAY_WETDRY");
+//    float distortion_wetdry_balance = *apvts.getRawParameterValue("DISTORTION_WETDRY");
+//    float delay_wetdry_balance = *apvts.getRawParameterValue("DELAY_WETDRY");
     
     for (int channel = 0; channel < getTotalNumOutputChannels(); ++channel)
     {
@@ -218,37 +175,45 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             
             // Process Waveshaper
             float input_to_distortion = x;
-            float output_of_distortion = hw_Distortion.processSample(input_to_distortion, *apvts.getRawParameterValue("DISTORTION"), *apvts.getRawParameterValue("DISTORTION_TYPE"));
+            float output_of_distortion = hw_Distortion.processSample(input_to_distortion, distortion_amount, distortion_type);
             
                 // DISTORTION WET DRY BLEND
             
             x = ((1.0 - distortion_wetdry_balance) * x) + (distortion_wetdry_balance * output_of_distortion);
             
             // Process Delay
-            delay.setSpeed(*apvts.getRawParameterValue("DELAY_MODULATION"));
-            delay.setDelaySamples(*apvts.getRawParameterValue("DELAY_TIME") * 44.1);
+            delay.setSpeed(delay_modulation);
+            delay.setDelaySamples(delay_time * 44.1);
             
             // the input to delay is the regular signal, plus the output is fed back into the line
-            float input_to_delay = x + (-*apvts.getRawParameterValue("DELAY_FEEDBACK")
-                                        * delayFeedbackSample[channel]);
+            float input_to_delay = x + (-delay_feedback * delayFeedbackSample[channel]);
             
-            float output_of_delay = delay.processSample(input_to_delay, channel, *apvts.getRawParameterValue("DELAY_GROOVE"));
+            float output_of_delay = delay.processSample(input_to_delay, channel, delay_groove);
             
             // Set feedback sample
-            float distorted_feedback_sample = delay_repeats_distortion.processSample(output_of_delay, 1.0, 2);
+            float distorted_feedback_sample = delay_repeats_distortion.processSample(output_of_delay, 1.5, 3);
             
             delayFeedbackSample[channel] = distorted_feedback_sample;
                 // DELAY WET DRY BLEND
             
             x = ((1.0 - delay_wetdry_balance) * x) + (delay_wetdry_balance * output_of_delay);
             
+                        
+            // PAN ADJUSTMENT
             
-            // Process Gain - INCLUDE PAN HERE
+            if (channel == 0)
+                x *= left_pan;
+            if (channel == 1)
+                x *= right_pan;
+            
+            
+            // OUTPUT GAIN
             x *= output_gain;
-        
-            // Write to buffer
-            float y = x; // Set output samples
+            
+            // WRITE OUTPUT SAMPLE TO BUFFER
+            float y = x;
             buffer.getWritePointer(channel)[i] = y;
+           
         }
     }
 }
@@ -270,13 +235,40 @@ void SynthTakeIiAudioProcessor::getStateInformation (MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+
+    
+    auto state = apvts.copyState();
+    std::unique_ptr<XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
+    
+    
+    
+    
 }
 
 void SynthTakeIiAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+     
+    
+    
+    std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (apvts.state.getType()))
+            apvts.replaceState (ValueTree::fromXml (*xmlState));
+    
+   update();
+     
+    
 }
+
+    
+    
+    
+
 
 /*
  
@@ -284,7 +276,7 @@ void SynthTakeIiAudioProcessor::setStateInformation (const void* data, int sizeI
  in SynthVoice.h
  
  We pass values to the SynthVoiceParams struct which is serves as a bridge between the apvts
- and the SynthVoice file 
+ and the SynthVoice file
  
  
  */
@@ -331,6 +323,23 @@ void SynthTakeIiAudioProcessor::update()
     //=========================================================================
         // PLUGIN PROCESSOR PARAMS, DONT NEED TO BE PASSED TO PARAMS STRUCT
     
+    
+    
+    
+    // Delay
+    delay_wetdry_balance = apvts.getRawParameterValue("DELAY_WETDRY")->load();
+    delay_groove = apvts.getRawParameterValue("DELAY_GROOVE")->load();
+    delay_feedback = apvts.getRawParameterValue("DELAY_FEEDBACK")->load();
+    delay_time = apvts.getRawParameterValue("DELAY_TIME")->load();
+    delay_modulation = apvts.getRawParameterValue("DELAY_MODULATION")->load();
+    // Distortion
+    distortion_wetdry_balance = apvts.getRawParameterValue("DISTORTION_WETDRY")->load();
+    distortion_amount = apvts.getRawParameterValue("DISTORTION")->load();
+    distortion_type = apvts.getRawParameterValue("DISTORTION_TYPE")->load();
+    // Panning
+    left_pan = std::cos(degreesToRadians(apvts.getRawParameterValue("PAN")->load()));
+    right_pan = std::sin(degreesToRadians(apvts.getRawParameterValue("PAN")->load()));
+    // Output Volume
     output_gain = apvts.getRawParameterValue("OUTPUT")->load();
     
 }
@@ -409,3 +418,30 @@ SynthTakeIiAudioProcessor::createParameters()
     return { parameters.begin(), parameters.end() };
 }
 
+void SynthTakeIiAudioProcessor::debugParams() {
+    DBG("Attack: " << *apvts.getRawParameterValue("ATTACK"));
+    DBG("Decay: " << *apvts.getRawParameterValue("DECAY"));
+    DBG("Sustain: " << *apvts.getRawParameterValue("SUSTAIN"));
+    DBG("Release: " << *apvts.getRawParameterValue("RELEASE"));
+    //LFO
+    DBG("Rate: " << *apvts.getRawParameterValue("RATE"));
+    DBG("Depth: " << *apvts.getRawParameterValue("DEPTH"));
+    DBG("LFO WAVE: " << *apvts.getRawParameterValue("LFO_WAVE"));
+    // OSC 1
+    DBG("Osc 1 TYPE: " << *apvts.getRawParameterValue("OSC1_WAVE"));
+    DBG("Osc 1 Pitch Semitones: " << *apvts.getRawParameterValue("OSC1_PITCH"));
+    DBG("Osc 1 Detune Cents: " << * apvts.getRawParameterValue("OSC1_DETUNE"));
+    // OSCsc
+    DBG("Osc 2 TYPE: " << *apvts.getRawParameterValue("OSC2_WAVE"));
+    DBG("Osc 2 Pitch Semitones: " << *apvts.getRawParameterValue("OSC2_PITCH"));
+    DBG("Osc 2 Detune Cents: " << * apvts.getRawParameterValue("OSC2_DETUNE"));
+    // FILTER
+    DBG("Filter Type: " << *apvts.getRawParameterValue("FILTER_TYPE"));
+    DBG("Filter Cutoff: " << *apvts.getRawParameterValue("FILTER_CUTOFF"));
+    DBG("Filter Resonance: " << *apvts.getRawParameterValue("FILTER_RESONANCE"));
+    // FX
+    DBG("DIST: " << *apvts.getRawParameterValue("DISTORTION"));
+    // OUTPUT
+    DBG("PAN: " << *apvts.getRawParameterValue("PAN"));
+    DBG("OP: " << *apvts.getRawParameterValue("OUTPUT"));
+}
