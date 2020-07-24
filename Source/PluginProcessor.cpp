@@ -150,6 +150,60 @@ bool SynthTakeIiAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
 void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     
+    /*
+     Tasks:
+     1. Basic class hacked out
+     2. iterate through midi messages
+     3. push valid ccs to fifo
+     4. correctly pull from fifo when midi learn is desired
+     5. indicate that a parameter has been mapped to cc
+     6. iterate through midi messages and change mapped parameters
+        i. is midi a relevant cc?
+            ii. search cc tree for mapping
+                iii. if mapped, use getParameter(paramID)
+                    iv. remap from cc to parameter range
+                        v. parameter.setValueNotifyingHost(parameter.To0to1(127 / cc value))
+     
+     if no cc table exists, create cc table
+     7. Iteratively create cc table??
+     
+     ...
+     
+     ??. When you save state, include cc table
+     
+     ValueTree?????????
+     Properties:
+        CC numbers
+        Held by processor
+     */
+    
+    
+    /*
+        How do we safely get midi messages into the GUI?
+     
+        FIFO
+        
+     
+        parseMidiForAssignment
+        {
+            if a CC is in range
+            push CC# fifo
+        }
+     
+        PluginProcessor.h
+                MidiFifo
+                    push()
+                    pull()
+             
+        knob::assignToCC ()
+        {
+            auto cc = processor.fifo.pull()
+     
+        }
+     
+    
+     */
+    
     // Clear any leftovers in the buffer
     // clear buffer to avoid noise in case you are not filling them (all)
     for (int i = getTotalNumInputChannels(); i < getTotalNumOutputChannels(); ++i)
@@ -183,7 +237,7 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             
             // Process Delay
             delay.setSpeed(delay_modulation);
-            delay.setDelaySamples(delay_time * 44.1);
+            delay.setDelaySamples(delay_time * 44.1); // revise
             
             // the input to delay is the regular signal, plus the output is fed back into the line
             float input_to_delay = x + (-delay_feedback * delayFeedbackSample[channel]);

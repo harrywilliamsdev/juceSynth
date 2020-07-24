@@ -7,6 +7,9 @@
     <GROUP id="{5F2228E9-5A13-B07E-928D-5870086D1A66}" name="Source">
       <GROUP id="{3603A2DC-06A5-A858-59AC-02782C59616D}" name="HW Objects">
         <FILE id="PP10Cr" name="CustomColours.h" compile="0" resource="0" file="Source/CustomColours.h"/>
+        <FILE id="TR7ty5" name="CustomSlider.cpp" compile="1" resource="0"
+              file="Source/CustomSlider.cpp"/>
+        <FILE id="y2iEAp" name="CustomSlider.h" compile="0" resource="0" file="Source/CustomSlider.h"/>
         <FILE id="irLps9" name="Delay.cpp" compile="1" resource="0" file="Source/Delay.cpp"/>
         <FILE id="o3xLz0" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
         <FILE id="fB7TBp" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
