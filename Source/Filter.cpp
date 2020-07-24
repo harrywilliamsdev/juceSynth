@@ -55,13 +55,23 @@ float Filter::process_sample(float x, float cutoff, int type)
             {
                 // Q =
                 
+//                a0 = 1.f + alpha;
+//                b0 = 1 + cos_w0 / 2;
+//                b1 = -(1 + cos_w0);
+//                b2 = 1 + cos_w0 / 2;
+//                a1 = -2 * cos_w0;
+//                a2 = 1.f - alpha;
+//                break;
+                
+                
                 a0 = 1.f + alpha;
-                b0 = 1 + cos_w0 / 2;
-                b1 = -(1 + cos_w0);
-                b2 = 1 + cos_w0 / 2;
+                b0 = 1;
+                b1 = -2 * cos_w0;
+                b2 = 1;
                 a1 = -2 * cos_w0;
-                a2 = 1.f - alpha;
+                a2 = 1 - alpha;
                 break;
+                
             }
                 // BPF/Peaking Calculation
             case 3:

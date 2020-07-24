@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="nemr2H" name="SynthTakeII" projectType="audioplug" jucerVersion="5.4.7"
-              pluginFormats="buildAU,buildStandalone,buildUnity,buildVST3"
-              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
+              pluginFormats="buildAU,buildAUv3,buildStandalone,buildUnity,buildVST,buildVST3"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginManufacturer="HarryWilliams" pluginName="MSc Synth" pluginDesc="Msc Synth">
   <MAINGROUP id="AnyM7D" name="SynthTakeII">
     <GROUP id="{5F2228E9-5A13-B07E-928D-5870086D1A66}" name="Source">
       <GROUP id="{3603A2DC-06A5-A858-59AC-02782C59616D}" name="HW Objects">

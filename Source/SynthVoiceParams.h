@@ -25,11 +25,11 @@ struct SynthVoiceParameters
     float sustain { 0.8f };
     float release { 500.f };
     // Oscillator 1
-    int osc_1_wave { 2 };
+    int osc_1_wave { 1 };
     int osc_1_pitch { 0 };
     float osc_1_detune { 0.f} ;
     // Oscillator 2
-    int osc_2_wave { 2 };
+    int osc_2_wave { 1 };
     int osc_2_pitch { 0 };
     float osc_2_detune { 1.5f} ;
     // Filter

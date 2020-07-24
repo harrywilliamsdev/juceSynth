@@ -50,14 +50,14 @@ public:
     
 private:
     
-    double level;
-    double frequency;
+    double level {0};
+    double frequency {0};
     
-    double osc_1_frequency;
-    double osc_2_frequency;
+    double osc_1_frequency {0};
+    double osc_2_frequency {0};
     
-    float osc_1_cents;
-    float osc_2_cents;
+    float osc_1_cents {0};
+    float osc_2_cents {0};
     
     Envelope hw_envelope;
     Envelope hw_filter_envelope;

@@ -191,9 +191,9 @@ struct SynthParameterLimits
     const float osc_pitched_volume_default {0.5};
     const float osc_noise_volume_default {0};
     
-    const float output_volume_min {0.0};
-    const float output_volume_max {1.0};
-    const float output_volume_default {0.75};
+    const float output_volume_min {0};
+    const float output_volume_max {1};
+    const float output_volume_default {0.5};
     
     const float output_pan_min {0};
     const float output_pan_max {90};

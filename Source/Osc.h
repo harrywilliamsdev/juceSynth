@@ -32,4 +32,5 @@ public:
     double generate_saw(double frequency);
     double generate_square(double frequency);
     double generate_noise();
+    double generate_pseudorandom_noise();
 };

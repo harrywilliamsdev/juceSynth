@@ -98,6 +98,7 @@ double Oscillator::generate_noise()
 }
 
 
+
 double Oscillator::do_Oscillate(double frequency, int oscType)
 {
     switch(oscType)
@@ -117,7 +118,6 @@ double Oscillator::do_Oscillate(double frequency, int oscType)
         case 5:
             output = generate_noise();
             break;
-        
     }
     
     return output;

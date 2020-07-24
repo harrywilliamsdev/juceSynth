@@ -58,8 +58,8 @@ public:
     void update();
 
     // Parameters
-    SynthParameterLimits limits;
-    SynthVoiceParameters params;
+    SynthParameterLimits limits {0};
+    SynthVoiceParameters params {0};
     // Synth object and pointer to voice
     Synthesiser hw_Synth;
     SynthVoice* hw_Voice;

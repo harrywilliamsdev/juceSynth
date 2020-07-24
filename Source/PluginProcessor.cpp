@@ -22,6 +22,7 @@ apvts(*this, nullptr, "Parameters", createParameters())
     
     hw_Synth.clearVoices();
     
+    // This controls the polyphony
     for (int i = 0; i < 8; ++i)
     {
         hw_Synth.addVoice(new SynthVoice(&params));
@@ -155,9 +156,7 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     for (int i = getTotalNumInputChannels(); i < getTotalNumOutputChannels(); ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // update parameters in the synth voice
-    if (mustUpdateProcessing) // flag set by valueTreeProperyChanged
-        update();
+    
     
     
     // generate the next synth block
@@ -170,6 +169,10 @@ void SynthTakeIiAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     {
         for (int i = 0; i < buffer.getNumSamples(); ++i)
         {
+            
+            // update parameters in the synth voice
+            if (mustUpdateProcessing) // flag set by valueTreeProperyChanged
+                update();
          
             float x = buffer.getWritePointer(channel)[i];
             
@@ -237,7 +240,6 @@ void SynthTakeIiAudioProcessor::getStateInformation (MemoryBlock& destData)
     // as intermediaries to make it easy to save and load complex data.
     
 
-    
     auto state = apvts.copyState();
     std::unique_ptr<XmlElement> xml (state.createXml());
     copyXmlToBinary (*xml, destData);
@@ -340,6 +342,10 @@ void SynthTakeIiAudioProcessor::update()
     left_pan = std::cos(degreesToRadians(apvts.getRawParameterValue("PAN")->load()));
     right_pan = std::sin(degreesToRadians(apvts.getRawParameterValue("PAN")->load()));
     // Output Volume
+    
+    
+    
+    
     output_gain = apvts.getRawParameterValue("OUTPUT")->load();
     
 }

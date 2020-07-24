@@ -129,7 +129,7 @@ void SynthVoice::renderNextBlock(AudioBuffer<float> &outputBuffer, int startSamp
                 osc2_signal *= parameters->osc2_volume;
                 oscNoise_signal *= parameters->osc_noise_volume;
                     // AND SUM TOGETHER
-                double oscMixed = (osc_signal + osc2_signal + oscNoise_signal) * 0.5;
+                double oscMixed = (osc_signal + osc2_signal + oscNoise_signal) * 0.33;
                 
                 
             // APPLY VOLUME ENVELOPE TO THE SIGNALS
